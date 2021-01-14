@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="compile" name="Terms">
+    <property name="target" value="11" />
+    <property name="source" value="11" />
+    <property name="build.compiler" value="javac10+" />
+    <path id="Terms.classpath">
+        <pathelement location="jars/dtd.jar" />
+        <pathelement location="jars/json.jar" />
+        <pathelement location="jars/jsoup.jar" />
+        <pathelement location="jars/mapdb.jar" />
+        <pathelement location="jars/openxliff.jar" />
+    </path>
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+    <target name="init">
+        <mkdir dir="out" />
+        <copy includeemptydirs="false" todir="out">
+            <fileset dir="src">
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="out" failonerror="false" />
+    </target>
+    <target name="distclean">
+        <delete dir="bin" failonerror="false" />
+        <delete dir="conf" failonerror="false" />
+        <delete dir="include" failonerror="false" />
+        <delete dir="legal" failonerror="false" />
+        <delete dir="lib" failonerror="false" />
+        <delete file="release" />
+    </target>
+    <target name="compile" depends="clean,init">
+        <description>Build jar file</description>
+        <delete file="jars/terms.jar" />
+        <javac srcdir="src" destdir="out" classpathref="Terms.classpath" modulepathref="Terms.classpath" includeAntRuntime="false" />
+        <jar destfile="jars/terms.jar" basedir="out" />
+    </target>
+</project>
