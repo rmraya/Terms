@@ -21,7 +21,6 @@ package com.maxprograms.terms;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -36,31 +35,30 @@ import com.maxprograms.xml.SAXBuilder;
 
 import org.xml.sax.SAXException;
 
-public class TermExtractor {
+public class BilingualTermExtractor {
 
     private Map<String, List<Integer>> sourceMap;
+    private Map<String, List<Integer>> targetMap;
     private List<String> sourceStopWords;
+    private List<String> targetStopWords;
     private String srcLang;
+    private String tgtLang;
     private int segId;
 
     public static void main(String[] args) {
         try {
-            TermExtractor instance = new TermExtractor(
+            BilingualTermExtractor instance = new BilingualTermExtractor(
                     "/Users/rmraya/Samples/Patricia/81268977_03b_Probeübersetzung Ausgangstext (Los 4 EN-FR).docx.xlf");
-            List<Candidate> candidates = instance.getCandidates();
-            for (int i = 0; i < candidates.size(); i++) {
-                Candidate c = candidates.get(i);
-                if (c.getFrequency() > 2) {
-                    System.out.println(c.getTerm() + "   =>  " + c.getFrequency() + "   =>  " + c.getScore());
-                }
-            }
+            instance.matchMaps();
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public TermExtractor(String xliffFile) throws IOException, SAXException, ParserConfigurationException {
+    public BilingualTermExtractor(String xliffFile) throws SAXException, IOException, ParserConfigurationException {
         sourceMap = new HashMap<>();
+        targetMap = new HashMap<>();
+        segId = 0;
 
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xliffFile);
@@ -70,28 +68,47 @@ public class TermExtractor {
         }
         srcLang = root.getAttributeValue("srcLang");
         sourceStopWords = StopWords.getStopWords(srcLang);
+        tgtLang = root.getAttributeValue("trgLang");
+        targetStopWords = StopWords.getStopWords(tgtLang);
         buildMaps(root);
     }
 
     private void buildMaps(Element e) {
         if ("segment".equals(e.getName())) {
             Element source = e.getChild("source");
-            String sourceText = Utils.pureText(source);
-            if (!sourceText.isBlank()) {
-                List<String> sourceList = Utils.buildTermsList(sourceText, sourceStopWords);
-                for (int i = 0; i < sourceList.size(); i++) {
-                    String term = sourceList.get(i);
-                    if (sourceMap.containsKey(term)) {
-                        List<Integer> list = sourceMap.get(term);
-                        list.add(segId);
-                        sourceMap.put(term, list);
-                    } else {
-                        List<Integer> list = new ArrayList<>();
-                        list.add(segId);
-                        sourceMap.put(term, list);
+            Element target = e.getChild("target");
+            if (source != null && target != null) {
+                String sourceText = Utils.pureText(source);
+                String targetText = Utils.pureText(target);
+                if (!sourceText.isBlank() && !targetText.isBlank()) {
+                    List<String> sourceList = Utils.buildTermsList(sourceText, sourceStopWords);
+                    for (int i = 0; i < sourceList.size(); i++) {
+                        String term = sourceList.get(i);
+                        if (sourceMap.containsKey(term)) {
+                            List<Integer> list = sourceMap.get(term);
+                            list.add(segId);
+                            sourceMap.put(term, list);
+                        } else {
+                            List<Integer> list = new ArrayList<>();
+                            list.add(segId);
+                            sourceMap.put(term, list);
+                        }
                     }
+                    List<String> targetList = Utils.buildTermsList(targetText, targetStopWords);
+                    for (int i = 0; i < targetList.size(); i++) {
+                        String term = targetList.get(i);
+                        if (targetMap.containsKey(term)) {
+                            List<Integer> list = targetMap.get(term);
+                            list.add(segId);
+                            targetMap.put(term, list);
+                        } else {
+                            List<Integer> list = new ArrayList<>();
+                            list.add(segId);
+                            targetMap.put(term, list);
+                        }
+                    }
+                    segId++;
                 }
-                segId++;
             }
         } else {
             List<Element> children = e.getChildren();
@@ -102,19 +119,26 @@ public class TermExtractor {
         }
     }
 
-    public List<Candidate> getCandidates() {
-        List<Candidate> result = new ArrayList<>();
+    public void matchMaps() {
         Set<String> keys = sourceMap.keySet();
         Iterator<String> it = keys.iterator();
         while (it.hasNext()) {
-            String term = it.next();
-            List<Integer> count = sourceMap.get(term);
-            int termFrequency = count.size();
-            double inverseTermFrequncy = Math.log(segId / termFrequency);
-            double score = termFrequency * inverseTermFrequncy;
-            result.add(new Candidate(term, termFrequency, score));
+            String key = it.next();
+            List<Integer> list = sourceMap.get(key);
+            if (list.size() > 1) {
+                if (targetMap.containsValue(list)) {
+                    System.out.println(key + ": ");
+                    Set<String> targetKeys = targetMap.keySet();
+                    Iterator<String> tt = targetKeys.iterator();
+                    while (tt.hasNext()) {
+                        String targetKey = tt.next();
+                        List<Integer> targetList = targetMap.get(targetKey);
+                        if (targetList.equals(list)) {
+                            System.out.println("   " + targetKey);
+                        }
+                    }
+                }
+            }
         }
-        Collections.sort(result);
-        return result;
     }
 }
