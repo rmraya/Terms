@@ -23,6 +23,7 @@ module terms {
 	
 	requires java.base;
 	requires java.xml;
-	requires transitive openxliff;
+	requires json;
+	requires transitive xmljava;
 	requires java.logging;
 }
