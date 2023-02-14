@@ -98,7 +98,7 @@ public class Token {
     private static boolean isNumber(String string) {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
-            if (!(c >= '0' && c <= '9') && c != '.' && c != ',') {
+            if (!(Character.isDigit(c) || c == '.' || c != ',')) {
                 return false;
             }
         }
