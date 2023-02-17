@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch LevenshteinDistance",
+            "request": "launch",
+            "mainClass": "terms/com.maxprograms.terms.LevenshteinDistance",
+            "projectName": "Terms"
+        },
+        {
+            "type": "java",
             "name": "Launch BilingualTermExtractor",
             "request": "launch",
             "mainClass": "terms/com.maxprograms.terms.BilingualTermExtractor",

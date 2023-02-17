@@ -181,9 +181,14 @@ public class TermExtractor {
     private void featureComputation() {
         List<Integer> frequencies = new ArrayList<>();
         int sum = 0;
+        int maxFrequency = 0;
         for (int i = 0; i < terms.size(); i++) {
-            sum += terms.get(i).getTermFrequency();
-            frequencies.add(terms.get(i).getTermFrequency());
+            int frequency = terms.get(i).getTermFrequency();
+            sum += frequency;
+            frequencies.add(frequency);
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+            }
         }
         double meanFrequency = sum / frequencies.size();
         double sDeviation = standardDeviation(frequencies.toArray(new Integer[frequencies.size()]));

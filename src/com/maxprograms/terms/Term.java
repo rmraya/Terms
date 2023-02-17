@@ -21,6 +21,7 @@ public class Term {
     private int upperCaseFreqquency;
     private double tCase;
     private double tPos;
+    private double tfNorm;
 
     public Term(String term) {
         this.term = term;
@@ -76,6 +77,6 @@ public class Term {
     }
 
     public void setTFNorm(double meanFrequency, double sDeviation) {
-        // TODO
+        tfNorm = termFrequency / ((meanFrequency + 1) * sDeviation);
     }
 }
