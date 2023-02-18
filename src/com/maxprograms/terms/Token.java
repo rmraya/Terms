@@ -97,11 +97,14 @@ public class Token {
 
     private static boolean isNumber(String string) {
         for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
-            if (!(Character.isDigit(c) || c == '.' || c != ',')) {
+            if (!Character.isDigit(string.charAt(i))) {
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean isRelatable() {
+        return tag.equals(ACRONYM) || tag.equals(PARSABLE) || tag.equals(UPPERCASE);
     }
 }

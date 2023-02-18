@@ -10,9 +10,13 @@
 
 package com.maxprograms.terms;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,31 +33,7 @@ import com.maxprograms.xml.SAXBuilder;
 
 public class TermExtractor {
 
-    private class Pair {
-
-        int a;
-        int b;
-
-        public Pair(int a, int b) {
-            this.a = a;
-            this.b = b;
-        }
-
-        @Override
-        public int hashCode() {
-            return (a + "|" + b).hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Pair pair) {
-                return a == pair.a && b == pair.b;
-            }
-            return false;
-        }
-    }
-
-    private static final int WINDOW = 2;
+    private static final int WINDOW = 1;
 
     private List<String> stopWords;
     private String srcLang;
@@ -65,14 +45,24 @@ public class TermExtractor {
     private BreakIterator wordsIterator;
     private Locale locale;
     private List<Term> terms;
-    private Map<Integer, Integer> cooccur;
 
     public static void main(String[] args) {
         try {
-            new TermExtractor("/Users/rmraya/Desktop/Guia-para-OR-v7.docx.xlf");
+            TermExtractor extractor = new TermExtractor("/Users/rmraya/Desktop/Guia-para-OR-v7.docx.xlf");
+            List<Term> list = extractor.getTerms();
+            Collections.sort(list);
+            try (FileOutputStream out = new FileOutputStream(new File("/Users/rmraya/Desktop/terms.csv"))) {
+                for (int i = 0; i < list.size(); i++) {
+                    out.write((i + "\t" + list.get(i).getData() + "\n").getBytes(StandardCharsets.UTF_8));
+                }
+            }
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<Term> getTerms() {
+        return terms;
     }
 
     public TermExtractor(String xliffFile) throws IOException, SAXException, ParserConfigurationException {
@@ -126,7 +116,6 @@ public class TermExtractor {
     private void termStatistics() {
         terms = new ArrayList<>();
         index = new HashMap<>();
-        cooccur = new HashMap<>();
         for (int i = 0; i < sentences.size(); i++) {
             String[] array = chunks.get(i);
             for (int j = 0; j < array.length; j++) {
@@ -149,28 +138,18 @@ public class TermExtractor {
                     if (Token.UPPERCASE.equals(token.getTag())) {
                         term.increaseUpperCase();
                     }
-                    for (int m = 1; m < WINDOW; m++) {
+                    for (int m = 1; m <= WINDOW; m++) {
                         if (k - m >= 0) {
                             Token previous = tokens.get(k - m);
-                            int pdx = index.get(previous.getLower());
-                            Pair p = new Pair(pdx, idx);
-                            if (!cooccur.containsKey(p.hashCode())) {
-                                cooccur.put(p.hashCode(), 0);
+                            if (previous.isRelatable()) {
+                                term.addLeft(previous.getLower());
                             }
-                            cooccur.put(p.hashCode(), cooccur.get(p.hashCode()) + 1);
                         }
                         if (k + m < tokens.size()) {
                             Token next = tokens.get(k + m);
-                            if (!index.containsKey(next.getLower())) {
-                                terms.add(new Term(next.getToken()));
-                                index.put(next.getLower(), terms.size() - 1);
+                            if (next.isRelatable()) {
+                                term.addRight(next.getLower());
                             }
-                            int nxt = index.get(next.getLower());
-                            Pair p = new Pair(idx, nxt);
-                            if (!cooccur.containsKey(p.hashCode())) {
-                                cooccur.put(p.hashCode(), 0);
-                            }
-                            cooccur.put(p.hashCode(), cooccur.get(p.hashCode()) + 1);
                         }
                     }
                 }
@@ -193,9 +172,10 @@ public class TermExtractor {
         double meanFrequency = sum / frequencies.size();
         double sDeviation = standardDeviation(frequencies.toArray(new Integer[frequencies.size()]));
         for (int i = 0; i < terms.size(); i++) {
-            terms.get(i).setTCase();
-            terms.get(i).setTPos();
-            terms.get(i).setTFNorm(meanFrequency, sDeviation);
+            terms.get(i).calcFrequency(meanFrequency, sDeviation);
+            terms.get(i).calcDifferent(sentences.size());
+            terms.get(i).calcRelatednes(maxFrequency);
+            terms.get(i).calcScore();
         }
     }
 
