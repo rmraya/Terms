@@ -78,13 +78,13 @@ public class Term implements Comparable<Term> {
         return Math.max(upperCaseFreqquency, acronymFrequency) / (1 + Math.log(termFrequency));
     }
 
-    public void sentencePosition() {
+    public double getPosition() {
         int sum = 0;
         for (int pos : offsetSentences) {
-            sum += pos;
+            sum +=  pos;
         }
         double median = sum / offsetSentences.size();
-        position = Math.log(Math.log(3 + median));
+        return Math.log(Math.log(3 + median));
     }
 
     public void calcFrequency(double meanFrequency, double sDeviation) {
@@ -114,9 +114,7 @@ public class Term implements Comparable<Term> {
         double wr = rightSum != 0 ? rightWords.size() / rightSum : 0;
         int leftSum = sum(leftWords);
         double wl = leftSum != 0 ? leftWords.size() / leftSum : 0;
-        double pl = leftSum / maxFrequency;
-        double pr = rightSum / maxFrequency;
-        relatedness = 1 + (wr + wl) * frequency / maxFrequency + pl + pr;
+        relatedness = 1 + (wr + wl) * frequency / maxFrequency;
     }
 
     private int sum(Map<String, Integer> map) {
@@ -131,11 +129,13 @@ public class Term implements Comparable<Term> {
 
     public void calcScore() {
         casing = getCasing();
+        position = getPosition();
         score = relatedness * position / (casing + (frequency / relatedness) + (different / relatedness));
     }
 
     public String getData() {
-        return term + "\t" + casing + "\t" + position + "\t" + frequency + "\t" + relatedness + "\t" + different;
+        return term + "\t" + score + "\t" + casing + "\t" + position + "\t" + frequency + "\t" + relatedness + "\t"
+                + different;
     }
 
     public double getScore() {

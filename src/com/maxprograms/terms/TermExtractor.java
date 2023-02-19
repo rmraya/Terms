@@ -45,15 +45,21 @@ public class TermExtractor {
     private BreakIterator wordsIterator;
     private Locale locale;
     private List<Term> terms;
+    private List<String> candidates;
 
     public static void main(String[] args) {
         try {
-            TermExtractor extractor = new TermExtractor("/Users/rmraya/Desktop/Guia-para-OR-v7.docx.xlf");
+            TermExtractor extractor = new TermExtractor(
+                    "C:\\Users\\rmray\\OneDrive\\Desktop\\CNECT-2022-00289-00-01-EN-ORI-00.DOCX.xlf");
             List<Term> list = extractor.getTerms();
             Collections.sort(list);
-            try (FileOutputStream out = new FileOutputStream(new File("/Users/rmraya/Desktop/terms.csv"))) {
+            try (FileOutputStream out = new FileOutputStream(
+                    new File("C:\\Users\\rmray\\OneDrive\\Desktop\\terms.csv"))) {
+                String title = "# , term , score , casing , position , frequency , relatedness , different\n";
+                out.write(title.getBytes(StandardCharsets.UTF_16LE));
                 for (int i = 0; i < list.size(); i++) {
-                    out.write((i + "\t" + list.get(i).getData() + "\n").getBytes(StandardCharsets.UTF_8));
+                    out.write((i + "," + list.get(i).getData().replace("\t", ",") + "\n")
+                            .getBytes(StandardCharsets.UTF_16LE));
                 }
             }
         } catch (SAXException | IOException | ParserConfigurationException e) {
@@ -68,6 +74,8 @@ public class TermExtractor {
     public TermExtractor(String xliffFile) throws IOException, SAXException, ParserConfigurationException {
         sentences = new ArrayList<>();
         chunks = new ArrayList<>();
+        candidates = new ArrayList<>();
+
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xliffFile);
         Element root = doc.getRootElement();
@@ -83,6 +91,7 @@ public class TermExtractor {
         preProcess();
         termStatistics();
         featureComputation();
+        generateCandidates();
     }
 
     private void buildSentences(Element e) {
@@ -207,7 +216,7 @@ public class TermExtractor {
                 || type == Character.START_PUNCTUATION;
     }
 
-    private List<Token> getTokens(String chunk, boolean firstChunk) {
+    private List<String> getWords(String chunk) {
         List<String> words = new ArrayList<>();
         if (!chunk.isBlank()) {
             wordsIterator.setText(chunk);
@@ -219,6 +228,11 @@ public class TermExtractor {
                 }
             }
         }
+        return words;
+    }
+
+    private List<Token> getTokens(String chunk, boolean firstChunk) {
+        List<String> words = getWords(chunk);        
         List<Token> tokens = new ArrayList<>();
         for (int i = 0; i < words.size(); i++) {
             String word = words.get(i);
@@ -244,5 +258,9 @@ public class TermExtractor {
         }
         double variance = deviations / length;
         return Math.sqrt(variance);
+    }
+
+    public void generateCandidates() {
+        // TODO
     }
 }
