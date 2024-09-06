@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="compile" name="Terms">
-    <property name="target" value="11" />
-    <property name="source" value="11" />
+    <property name="target" value="21" />
+    <property name="source" value="21" />
     <property name="build.compiler" value="javac10+" />
     <path id="Terms.classpath">
         <pathelement location="jars/json.jar" />

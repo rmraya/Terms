@@ -142,6 +142,10 @@ public class Term implements Comparable<Term> {
         return score;
     }
 
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     @Override
     public int compareTo(Term o) {
         if (score > o.getScore()) {

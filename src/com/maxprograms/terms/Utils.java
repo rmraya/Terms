@@ -19,9 +19,6 @@ import com.maxprograms.xml.XMLNode;
 
 public class Utils {
 
-    public static final String TERM_SEPARATORS = " \u00A0\r\n\f\t\u2028\u2029,.;\":<>¿?¡!()[]{}=+/*\u00AB\u00BB\u201C\u201D\u201E\uFF00";
-    public static final int MAXTERMLENGTH = 5;
-
     public static String pureText(Element e) {
         StringBuilder sb = new StringBuilder();
         List<XMLNode> content = e.getContent();

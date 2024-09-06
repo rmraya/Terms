@@ -32,16 +32,7 @@ public class LevenshteinDistance {
     }
 
     private static int min(int a, int b, int c) {
-        int min = Integer.MAX_VALUE;
-        if (a < min) {
-            min = a;
-        }
-        if (b < min) {
-            min = b;
-        }
-        if (c < min) {
-            min = c;
-        }
-        return min;
+        int min = Math.min(a, b);
+        return Math.min(min, c);
     }
 }
