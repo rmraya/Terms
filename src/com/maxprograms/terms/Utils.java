@@ -10,6 +10,7 @@
 
 package com.maxprograms.terms;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,4 +39,15 @@ public class Utils {
         return sb.toString();
     }
 
+    public static double median(List<Integer> list) {
+        Collections.sort(list);
+        int length = list.size();
+        if (length % 2 == 0) {
+            // If even, average the two middle elements
+            return (list.get(length / 2 - 1) + list.get(length / 2)) / 2.0;
+        } else {
+            // If odd, return the middle element
+            return (double) list.get(length / 2);
+        }
+    }
 }

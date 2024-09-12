@@ -65,6 +65,9 @@ public class Token {
     }
 
     private boolean isAcronym(String string) {
+        if (string.length() < 2) {
+            return false;
+        }
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
             if (!Character.isUpperCase(c)) {

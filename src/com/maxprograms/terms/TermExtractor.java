@@ -15,13 +15,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -41,7 +41,7 @@ public class TermExtractor {
 
     private List<String> sentences;
     private Map<String, Integer> index;
-    private ArrayList<String[]> chunks;
+    private Vector<String[]> chunks;
     private BreakIterator sentenceIterator;
     private BreakIterator wordsIterator;
     private Locale locale;
@@ -50,7 +50,7 @@ public class TermExtractor {
     public static void main(String[] args) {
         try {
             TermExtractor extractor = new TermExtractor(
-                    "/Users/rmraya/Desktop/Guia-para-OR-v7.docx.xlf");
+                    "/Users/rmraya/Desktop/xliffmanager.ditamap.xlf");
             List<Term> list = extractor.getTerms();
             Collections.sort(list);
             try (FileOutputStream out = new FileOutputStream(
@@ -72,8 +72,8 @@ public class TermExtractor {
     }
 
     public TermExtractor(String xliffFile) throws IOException, SAXException, ParserConfigurationException {
-        sentences = new ArrayList<>();
-        chunks = new ArrayList<>();
+        sentences = new Vector<>();
+        chunks = new Vector<>();
 
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xliffFile);
@@ -122,12 +122,12 @@ public class TermExtractor {
     }
 
     private void termStatistics() {
-        terms = new ArrayList<>();
+        terms = new Vector<>();
         index = new HashMap<>();
         for (int i = 0; i < sentences.size(); i++) {
-            String[] array = chunks.get(i);
-            for (int j = 0; j < array.length; j++) {
-                String chunk = array[j];
+            String[] chunkArray = chunks.get(i);
+            for (int j = 0; j < chunkArray.length; j++) {
+                String chunk = chunkArray[j];
                 List<Token> tokens = getTokens(chunk, j == 0);
                 for (int k = 0; k < tokens.size(); k++) {
                     Token token = tokens.get(k);
@@ -166,39 +166,46 @@ public class TermExtractor {
     }
 
     private void featureComputation() {
-        List<Integer> frequencies = new ArrayList<>();
-        int sum = 0;
+        List<Integer> frequencies = new Vector<>();
         int maxFrequency = 0;
         for (int i = 0; i < terms.size(); i++) {
-            int frequency = terms.get(i).getTermFrequency();
-            sum += frequency;
+            Term term = terms.get(i);
+            int frequency = term.getTermFrequency();
             frequencies.add(frequency);
             if (frequency > maxFrequency) {
                 maxFrequency = frequency;
             }
         }
-        double meanFrequency = sum / frequencies.size();
+        double meanFrequency = Utils.median(frequencies);
         double sDeviation = standardDeviation(frequencies.toArray(new Integer[frequencies.size()]));
         for (int i = 0; i < terms.size(); i++) {
-            terms.get(i).calcFrequency(meanFrequency, sDeviation);
-            terms.get(i).calcDifferent(sentences.size());
-            terms.get(i).calcRelatednes(maxFrequency);
-            terms.get(i).calcScore();
+            Term term = terms.get(i);
+            term.calcFrequency(meanFrequency, sDeviation);
+            term.calcDifferent(sentences.size());
+            term.calcRelatednes(maxFrequency);
+            term.calcScore();
         }
     }
 
     private String[] getChunks(String sentence) {
-        List<String> list = new ArrayList<>();
+        List<String> list = new Vector<>();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < sentence.length(); i++) {
             char c = sentence.charAt(i);
+            if ((i > 0 && i < sentence.length() - 1) && (c == '.')) {
+                // check if we have a number
+                char before = sentence.charAt(i - 1);
+                char after = sentence.charAt(i + 1);
+                if (Character.isDigit(before) && Character.isDigit(after)) {
+                    sb.append(c);
+                    continue;
+                }
+            }
             if (!isPunctuation(c)) {
                 sb.append(c);
             } else {
-                if (!sb.isEmpty()) {
-                    list.add(sb.toString());
-                    sb = new StringBuilder();
-                }
+                list.add(sb.toString());
+                sb = new StringBuilder();
             }
         }
         if (!sb.isEmpty()) {
@@ -216,7 +223,7 @@ public class TermExtractor {
     }
 
     private List<Token> getTokens(String chunk, boolean firstChunk) {
-        List<String> words = new ArrayList<>();
+        List<String> words = new Vector<>();
         if (!chunk.isBlank()) {
             wordsIterator.setText(chunk);
             int start = wordsIterator.first();
@@ -227,7 +234,7 @@ public class TermExtractor {
                 }
             }
         }
-        List<Token> tokens = new ArrayList<>();
+        List<Token> tokens = new Vector<>();
         for (int i = 0; i < words.size(); i++) {
             String word = words.get(i);
             tokens.add(new Token(word, isStopWord(word), locale, i == 0 && firstChunk));
@@ -261,7 +268,7 @@ public class TermExtractor {
                 String chunk = array[j];
                 List<Token> tokens = getTokens(chunk, j == 0);
                 for (int h = 0; h < tokens.size(); h++) {
-                    List<Token> candidate = new ArrayList<>();
+                    List<Token> candidate = new Vector<>();
                     Token token = tokens.get(h);
                     if (token.isRelatable()) {
                         for (int k = 0; k < NGRAMSIZE && (h + k) < tokens.size(); k++) {
@@ -288,6 +295,7 @@ public class TermExtractor {
                 }
             }
         }
+        terms.removeIf(term -> isStopWord(term.getTerm()));
     }
 
     private double calcScore(List<Token> tokens, int frequency) {

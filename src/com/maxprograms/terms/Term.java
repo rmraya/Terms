@@ -10,16 +10,16 @@
 
 package com.maxprograms.terms;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 public class Term implements Comparable<Term> {
 
     private String term;
-    private ArrayList<Integer> offsetSentences;
+    private Vector<Integer> offsetSentences;
     private int termFrequency;
     private int acronymFrequency;
     private int upperCaseFreqquency;
@@ -34,7 +34,7 @@ public class Term implements Comparable<Term> {
 
     public Term(String term) {
         this.term = term;
-        offsetSentences = new ArrayList<>();
+        offsetSentences = new Vector<>();
         termFrequency = 0;
         acronymFrequency = 0;
         upperCaseFreqquency = 0;
@@ -79,11 +79,7 @@ public class Term implements Comparable<Term> {
     }
 
     public double getPosition() {
-        int sum = 0;
-        for (int pos : offsetSentences) {
-            sum +=  pos;
-        }
-        double median = sum / offsetSentences.size();
+        double median = Utils.median(offsetSentences);
         return Math.log(Math.log(3 + median));
     }
 
@@ -106,7 +102,8 @@ public class Term implements Comparable<Term> {
     }
 
     public void calcDifferent(int sentences) {
-        different = offsetSentences.size() / sentences;
+        double size = offsetSentences.size();
+        different = size / sentences;
     }
 
     public void calcRelatednes(int maxFrequency) {
