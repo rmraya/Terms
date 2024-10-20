@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Maxprograms.
+ * Copyright (c) 2024 Maxprograms.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 1.0 which accompanies this distribution,
@@ -13,8 +13,11 @@ package com.maxprograms.terms;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,13 +51,42 @@ public class TermExtractor {
     private List<Term> terms;
 
     public static void main(String[] args) {
+        args = Utils.fixPath(args);
+
+        String xliff = "";
+        String output = "";
+        for (int i = 0; i < args.length; i++) {
+            if ("-xliff".equals(args[i]) && i + 1 < args.length) {
+                xliff = args[i + 1];
+            }
+            if ("-output".equals(args[i]) && i + 1 < args.length) {
+                output = args[i + 1];
+            }
+            if ("-version".equals(args[i])) {
+                Logger logger = System.getLogger(TermExtractor.class.getName());
+                MessageFormat mf = new MessageFormat("Version {0} Build {1}");
+                logger.log(Level.INFO,mf.format(new String[]{Constans.VERSION, Constans.BUILD}));
+                System.exit(0);
+            }
+            if ("-help".equals(args[i])) {
+                usage();
+                System.exit(0);
+            }
+        }
+        if (xliff.isEmpty()) {
+            usage();
+            System.exit(1);
+        }
+        if (output.isEmpty()) {
+            File file = new File(xliff);
+            String path = file.getAbsolutePath();
+            output = path.substring(0, path.lastIndexOf('.')) + ".csv";
+        }
         try {
-            TermExtractor extractor = new TermExtractor(
-                    "/Users/rmraya/Desktop/xliffmanager.ditamap.xlf");
+            TermExtractor extractor = new TermExtractor(xliff);
             List<Term> list = extractor.getTerms();
             Collections.sort(list);
-            try (FileOutputStream out = new FileOutputStream(
-                    new File("/Users/rmraya/Desktop/terms.csv"))) {
+            try (FileOutputStream out = new FileOutputStream(new File(output))) {
                 String title = "# , term , score , casing , position , frequency , relatedness , different\n";
                 out.write(title.getBytes(StandardCharsets.UTF_16LE));
                 for (int i = 0; i < list.size(); i++) {
@@ -65,6 +97,22 @@ public class TermExtractor {
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void usage() {
+        Logger logger = System.getLogger(TermExtractor.class.getName());
+        logger.log(Level.INFO, """
+                Usage:
+
+                    termExtractor [-version] [-help] -xliff xliffFile [-output outputFile]
+
+                Where:
+
+                        -version: (optional) Display version information and exit
+                        -help:    (optional) Display this usage information and exit
+                        -xliff:   The XLIFF file to process
+                        -output:  (optional) The output file where the terms will be written
+                """);
     }
 
     private List<Term> getTerms() {

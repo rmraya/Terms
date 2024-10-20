@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Maxprograms.
+ * Copyright (c) 2024 Maxprograms.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 1.0 which accompanies this distribution,
@@ -10,6 +10,7 @@
 
 package com.maxprograms.terms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,28 @@ import com.maxprograms.xml.TextNode;
 import com.maxprograms.xml.XMLNode;
 
 public class Utils {
+
+    public static String[] fixPath(String[] args) {
+		List<String> result = new ArrayList<>();
+		StringBuilder current = new StringBuilder();
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			if (arg.startsWith("-")) {
+				if (!current.isEmpty()) {
+					result.add(current.toString().trim());
+					current = new StringBuilder();
+				}
+				result.add(arg);
+			} else {
+				current.append(' ');
+				current.append(arg);
+			}
+		}
+		if (!current.isEmpty()) {
+			result.add(current.toString().trim());
+		}
+		return result.toArray(new String[result.size()]);
+	}
 
     public static String pureText(Element e) {
         StringBuilder sb = new StringBuilder();

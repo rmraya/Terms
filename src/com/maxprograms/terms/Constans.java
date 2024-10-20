@@ -8,13 +8,9 @@
  * Contributors: Maxprograms - initial API and implementation
  *******************************************************************************/
 
-module terms {
-	
-	exports com.maxprograms.terms;
-	
-	requires java.base;
-	requires java.xml;
-	requires json;
-	requires transitive xmljava;
-	requires java.logging;
+ package com.maxprograms.terms;
+
+public class Constans {
+    public static final String VERSION = "1.0.0";
+    public static final String BUILD = "20241020_0809";
 }
