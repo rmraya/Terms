@@ -44,7 +44,7 @@ Where:
 
 By default, the program extracts terms with a minimum frequency of 3, a maximum length of 3 words, and a maximum score of 0.001. Terms with a relevance less than 1.0 are excluded by default.
 
-The program writes a CSV (comma separated values) file named like the provided XLIFF file with `.csv` extension that contains the following columns:
+The program writes a CSV (comma separated values) file with the same name as the supplied XLIFF file with the .csv extension, containing the following columns:
 
 |Column| Description|
 |:--:|--|
