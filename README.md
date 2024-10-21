@@ -2,7 +2,7 @@
 
 Java tools for extractiong terms from XLIFF 2.0 files.
 
-This project is based on the paper *YAKE! Keyword extraction from single documents using multiple local features* by Ricardo Campos, Vítor Mangaravite, Arian Pasquali, Alípio Jorge,Célia Nunes and Adam Jatowt.
+This project is based on the paper *YAKE! Keyword extraction from single documents using multiple local features* by Ricardo Campos, Vítor Mangaravite, Arian Pasquali, Alípio Jorge, Célia Nunes and Adam Jatowt.
 
 ## Requirements for building
 
@@ -44,7 +44,7 @@ Where:
 
 By default, the program extracts terms with a minimum frequency of 3, a maximum length of 3 words, and a maximum score of 0.001. Terms with a relevance less than 1.0 are excluded by default.
 
-The program writes a CSV (comma separated values) file with the same name as the supplied XLIFF file with the .csv extension, containing the following columns:
+The program writes a CSV (comma separated values) file with the same name as the supplied XLIFF file with the `.csv` extension, containing the following columns:
 
 |Column| Description|
 |:--:|--|
