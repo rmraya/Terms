@@ -12,5 +12,5 @@
 
 public class Constans {
     public static final String VERSION = "1.0.0";
-    public static final String BUILD = "20241020_0809";
+    public static final String BUILD = "20241021_1147";
 }

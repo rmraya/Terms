@@ -36,7 +36,8 @@ import com.maxprograms.xml.SAXBuilder;
 
 public class TermExtractor {
 
-    private static final int WINDOW = 1;
+    private static Logger logger = System.getLogger(TermExtractor.class.getName());
+    private static final int WINDOW = 2;
 
     private List<String> stopWords;
     private String srcLang;
@@ -59,81 +60,68 @@ public class TermExtractor {
         boolean relevant = true;
         int maxTermLenght = 3;
 
-        for (int i = 0; i < args.length; i++) {
-            if ("-xliff".equals(args[i]) && i + 1 < args.length) {
-                xliff = args[i + 1];
-            }
-            if ("-output".equals(args[i]) && i + 1 < args.length) {
-                output = args[i + 1];
-            }
-            if ("-minFreq".equals(args[i]) && i + 1 < args.length) {
-                minFrequency = Integer.parseInt(args[i + 1]);
-            }
-            if ("-maxScore".equals(args[i]) && i + 1 < args.length) {
-                maxScore = Double.parseDouble(args[i + 1]);
-            }
-            if ("-generic".equals(args[i])) {
-                relevant = false;
-            }
-            if ("-maxLenght".equals(args[i]) && i + 1 < args.length) {
-                maxTermLenght = Integer.parseInt(args[i + 1]);
-            }
-            if ("-version".equals(args[i])) {
-                Logger logger = System.getLogger(TermExtractor.class.getName());
-                MessageFormat mf = new MessageFormat("Version {0} Build {1}");
-                logger.log(Level.INFO, mf.format(new String[] { Constans.VERSION, Constans.BUILD }));
-                System.exit(0);
-            }
-            if ("-help".equals(args[i])) {
-                usage();
-                System.exit(0);
-            }
-        }
-        if (xliff.isEmpty()) {
-            usage();
-            System.exit(1);
-        }
-        if (output.isEmpty()) {
-            File file = new File(xliff);
-            String path = file.getAbsolutePath();
-            output = path.substring(0, path.lastIndexOf('.')) + ".csv";
-        }
         try {
+            for (int i = 0; i < args.length; i++) {
+                if ("-xliff".equals(args[i]) && i + 1 < args.length) {
+                    xliff = args[i + 1];
+                }
+                if ("-output".equals(args[i]) && i + 1 < args.length) {
+                    output = args[i + 1];
+                }
+                if ("-minFreq".equals(args[i]) && i + 1 < args.length) {
+                    minFrequency = Integer.parseInt(args[i + 1]);
+                }
+                if ("-maxScore".equals(args[i]) && i + 1 < args.length) {
+                    maxScore = Double.parseDouble(args[i + 1]);
+                }
+                if ("-generic".equals(args[i])) {
+                    relevant = false;
+                }
+                if ("-maxLenght".equals(args[i]) && i + 1 < args.length) {
+                    maxTermLenght = Integer.parseInt(args[i + 1]);
+                }
+                if ("-version".equals(args[i])) {
+                    MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.4"));
+                    logger.log(Level.INFO, mf.format(new String[] { Constans.VERSION, Constans.BUILD }));
+                    System.exit(0);
+                }
+                if ("-help".equals(args[i])) {
+                    usage();
+                    System.exit(0);
+                }
+            }
+            if (xliff.isEmpty()) {
+                usage();
+                System.exit(1);
+            }
+            if (output.isEmpty()) {
+                File file = new File(xliff);
+                String path = file.getAbsolutePath();
+                if (path.lastIndexOf('.') == -1) {
+                    output = path + ".csv";
+                } else {
+                    output = path.substring(0, path.lastIndexOf('.')) + ".csv";
+                }
+            }
             TermExtractor extractor = new TermExtractor(xliff, maxTermLenght, minFrequency, maxScore, relevant);
             List<Term> list = extractor.getTerms();
             Collections.sort(list);
             try (FileOutputStream out = new FileOutputStream(new File(output))) {
                 out.write(new byte[] { -1, -2 });
-                String title = "#,term,score,casing,position,frequency,relevance,relatedness,different\n";
+                String title = Messages.getString("TermExtractor.1");
                 out.write(title.getBytes(StandardCharsets.UTF_16LE));
                 for (int i = 0; i < list.size(); i++) {
                     out.write(((i + 1) + "," + list.get(i).getData() + "\n").getBytes(StandardCharsets.UTF_16LE));
                 }
             }
-        } catch (SAXException | IOException | ParserConfigurationException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.5"));
+            logger.log(Level.ERROR, mf.format(new String[] {e.getClass().getSimpleName(),  e.getMessage() }));
         }
     }
 
     private static void usage() {
-        Logger logger = System.getLogger(TermExtractor.class.getName());
-        logger.log(Level.INFO,
-                """
-                        Usage:
-
-                            termExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLenght length] [-maxScore score] [-generic]
-
-                        Where:
-
-                                -version:   (optional) Display version information and exit
-                                -help:      (optional) Display this usage information and exit
-                                -xliff:     The XLIFF file to process
-                                -output:    (optional) The output file where the terms will be written
-                                -maxLenght: (optional) The maximum number of words in a term. Default: 3
-                                -minFreq:   (optional) The minimum frequency for a term to be considered. Default: 3
-                                -maxScore:  (optional) The maximum score for a term to be considered. Default: 0.001
-                                -generic:   (optional) Include terms with relevance < 1.0. Default: false
-                        """);
+        logger.log(Level.INFO, Messages.getString("TermExtractor.2"));
     }
 
     private List<Term> getTerms() {
@@ -149,7 +137,7 @@ public class TermExtractor {
         Document doc = builder.build(xliffFile);
         Element root = doc.getRootElement();
         if (!("xliff".equals(root.getName()) && root.getAttributeValue("version").startsWith("2."))) {
-            throw new IOException("Selected file is not an XLIFF 2.x document");
+            throw new IOException(Messages.getString("TermExtractor.3"));
         }
         srcLang = root.getAttributeValue("srcLang");
         locale = Locale.forLanguageTag(srcLang);
