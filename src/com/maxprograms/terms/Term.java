@@ -24,7 +24,7 @@ public class Term implements Comparable<Term> {
     private int acronymFrequency;
     private int upperCaseFreqquency;
     private double position;
-    private double frequency;
+    private double normalizedFrequency;
     private Map<String, Integer> leftWords;
     private Map<String, Integer> rightWords;
     private double different;
@@ -84,7 +84,11 @@ public class Term implements Comparable<Term> {
     }
 
     public void calcFrequency(double meanFrequency, double sDeviation) {
-        frequency = termFrequency / ((meanFrequency + 1) * sDeviation);
+        normalizedFrequency = termFrequency / (meanFrequency + 1 * sDeviation);
+    }
+
+    public double getRelevance() {
+        return 1 / (1 + normalizedFrequency);
     }
 
     public void addLeft(String word) {
@@ -111,7 +115,7 @@ public class Term implements Comparable<Term> {
         double wr = rightSum != 0 ? rightWords.size() / rightSum : 0;
         int leftSum = sum(leftWords);
         double wl = leftSum != 0 ? leftWords.size() / leftSum : 0;
-        relatedness = 1 + (wr + wl) * frequency / maxFrequency;
+        relatedness = 1 + (wr + wl) * normalizedFrequency / maxFrequency;
     }
 
     private int sum(Map<String, Integer> map) {
@@ -127,12 +131,12 @@ public class Term implements Comparable<Term> {
     public void calcScore() {
         casing = getCasing();
         position = getPosition();
-        score = relatedness * position / (casing + (frequency / relatedness) + (different / relatedness));
+        score = relatedness * position / (casing + (normalizedFrequency / relatedness) + (different / relatedness));
     }
 
     public String getData() {
-        return term + "\t" + score + "\t" + casing + "\t" + position + "\t" + frequency + "\t" + relatedness + "\t"
-                + different;
+        return term + ',' + score + ',' + casing + ',' + position + ',' + termFrequency + ',' + getRelevance() + ','
+                + relatedness + ',' + different;
     }
 
     public double getScore() {
@@ -149,6 +153,18 @@ public class Term implements Comparable<Term> {
             return 1;
         } else if (score < o.getScore()) {
             return -1;
+        }
+        // same score, sort on term frequency
+        if (termFrequency > o.getTermFrequency()) {
+            return -1;
+        } else if (termFrequency < o.getTermFrequency()) {
+            return 1;
+        }
+        // same frequency, sort on term length
+        if (term.length() > o.getTerm().length()) {
+            return -1;
+        } else if (term.length() < o.getTerm().length()) {
+            return 1;
         }
         return 0;
     }
