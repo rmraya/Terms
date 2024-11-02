@@ -12,6 +12,10 @@ package com.maxprograms.terms;
 
 public class LevenshteinDistance {
 
+    private LevenshteinDistance() {
+        // do not instantiate
+    }
+
     public static int distance(String x, String y) {
         int[][] matrix = new int[x.length() + 1][y.length() + 1];
         for (int i = 0; i <= x.length(); i++) {

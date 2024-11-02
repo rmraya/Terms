@@ -20,20 +20,20 @@ public class Token {
     public static final String UPPERCASE = "U"; // Uppercase
     public static final String PARSABLE = "p"; // Parsable content
 
-    String token;
+    String text;
     String lower;
     String tag;
     boolean stopWord;
 
     public Token(String token, boolean stopWord, Locale locale, boolean beginsSentence) {
-        this.token = token;
+        text = token;
         lower = token.toLowerCase(locale);
         tag = getType(beginsSentence);
         this.stopWord = stopWord;
     }
 
-    public String getToken() {
-        return token;
+    public String getText() {
+        return text;
     }
 
     public String getLower() {
@@ -49,27 +49,27 @@ public class Token {
     }
 
     private String getType(boolean beginsSentence) {
-        if (isNumber(token)) {
+        if (isNumber()) {
             return NUMBER;
         }
-        if (isAcronym(token)) {
+        if (isAcronym()) {
             return ACRONYM;
         }
-        if (isUnparsable(token)) {
+        if (isUnparsable()) {
             return UNPARSABLE;
         }
-        if (!beginsSentence && Character.isUpperCase(token.charAt(0))) {
+        if (!beginsSentence && Character.isUpperCase(text.charAt(0))) {
             return UPPERCASE;
         }
         return PARSABLE;
     }
 
-    private boolean isAcronym(String string) {
-        if (string.length() < 2) {
+    private boolean isAcronym() {
+        if (text.length() < 2) {
             return false;
         }
-        for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
             if (!Character.isUpperCase(c)) {
                 return false;
             }
@@ -77,11 +77,11 @@ public class Token {
         return true;
     }
 
-    private boolean isUnparsable(String string) {
+    private boolean isUnparsable() {
         int digits = 0;
         int letters = 0;
-        for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
             if (!(Character.isDigit(c) || Character.isLetter(c))) {
                 return true;
             }
@@ -98,9 +98,9 @@ public class Token {
         return false;
     }
 
-    private static boolean isNumber(String string) {
-        for (int i = 0; i < string.length(); i++) {
-            if (!Character.isDigit(string.charAt(i))) {
+    private  boolean isNumber() {
+        for (int i = 0; i < text.length(); i++) {
+            if (!Character.isDigit(text.charAt(i))) {
                 return false;
             }
         }

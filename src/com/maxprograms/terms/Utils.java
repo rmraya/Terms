@@ -21,6 +21,10 @@ import com.maxprograms.xml.XMLNode;
 
 public class Utils {
 
+    private Utils() {
+        // do not instantiate
+    }
+
     public static String[] fixPath(String[] args) {
 		List<String> result = new ArrayList<>();
 		StringBuilder current = new StringBuilder();

@@ -116,7 +116,7 @@ public class TermExtractor {
             }
         } catch (Exception e) {
             MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.5"));
-            logger.log(Level.ERROR, mf.format(new String[] {e.getClass().getSimpleName(),  e.getMessage() }));
+            logger.log(Level.ERROR, mf.format(new String[] { e.getClass().getSimpleName(), e.getMessage() }));
         }
     }
 
@@ -192,7 +192,7 @@ public class TermExtractor {
                     Token token = tokens.get(k);
                     String key = token.getLower();
                     if (!index.containsKey(key)) {
-                        terms.add(new Term(token.getToken()));
+                        terms.add(new Term(token.getText()));
                         index.put(key, terms.size() - 1);
                     }
                     int idx = index.get(key);
@@ -311,7 +311,7 @@ public class TermExtractor {
             sum += num;
         }
         int length = frequencies.length;
-        double mean = sum / length;
+        double mean = sum / (double) length;
         double deviations = 0.0;
         for (int num : frequencies) {
             deviations += Math.pow(num - mean, 2);
@@ -332,12 +332,13 @@ public class TermExtractor {
                     if (token.isRelatable()) {
                         for (int k = 0; k < maxTermLenght && (h + k) < tokens.size(); k++) {
                             candidate.add(tokens.get(h + k));
-                            String string = "";
+                            StringBuilder sb = new StringBuilder();
                             Iterator<Token> it = candidate.iterator();
                             while (it.hasNext()) {
-                                string += it.next().getToken() + ' ';
+                                sb.append(it.next().getText());
+                                sb.append(' ');
                             }
-                            string = string.strip();
+                            String string = sb.toString().strip();
                             if (!candidate.get(0).isStopWord() && !candidate.get(candidate.size() - 1).isStopWord()) {
                                 String key = string.toLowerCase();
                                 if (!index.containsKey(key)) {
@@ -358,9 +359,9 @@ public class TermExtractor {
             terms.removeIf(term -> term.getRelevance() < 1.0);
         }
         terms.removeIf(term -> term.getScore() > maxScore);
-        terms.removeIf(term -> isStopWord(term.getTerm()));
+        terms.removeIf(term -> isStopWord(term.getText()));
         terms.removeIf(term -> term.getTermFrequency() < minFrequency);
-        terms.removeIf(term -> isNumber(term.getTerm()));
+        terms.removeIf(term -> isNumber(term.getText()));
     }
 
     private boolean isNumber(String term) {
@@ -394,7 +395,6 @@ public class TermExtractor {
                 sum += (1 - bigramProbability);
             }
         }
-        double score = prod / (frequency * (sum + 1));
-        return score;
+        return prod / (frequency * (sum + 1));
     }
 }

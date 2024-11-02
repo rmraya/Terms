@@ -18,7 +18,7 @@ import java.util.Vector;
 
 public class Term implements Comparable<Term> {
 
-    private String term;
+    private String text;
     private Vector<Integer> offsetSentences;
     private int termFrequency;
     private int acronymFrequency;
@@ -33,7 +33,7 @@ public class Term implements Comparable<Term> {
     private double casing;
 
     public Term(String term) {
-        this.term = term;
+        text = term;
         offsetSentences = new Vector<>();
         termFrequency = 0;
         acronymFrequency = 0;
@@ -42,8 +42,8 @@ public class Term implements Comparable<Term> {
         rightWords = new HashMap<>();
     }
 
-    public String getTerm() {
-        return term;
+    public String getText() {
+        return text;
     }
 
     public void setSentence(int i) {
@@ -92,16 +92,12 @@ public class Term implements Comparable<Term> {
     }
 
     public void addLeft(String word) {
-        if (!leftWords.containsKey(word)) {
-            leftWords.put(word, 0);
-        }
+        leftWords.computeIfAbsent(word, k -> 0);
         leftWords.put(word, leftWords.get(word) + 1);
     }
 
     public void addRight(String word) {
-        if (!rightWords.containsKey(word)) {
-            rightWords.put(word, 0);
-        }
+        rightWords.computeIfAbsent(word, k -> 0);
         rightWords.put(word, rightWords.get(word) + 1);
     }
 
@@ -135,7 +131,7 @@ public class Term implements Comparable<Term> {
     }
 
     public String getData() {
-        return term + ',' + score + ',' + casing + ',' + position + ',' + termFrequency + ',' + getRelevance() + ','
+        return text + ',' + score + ',' + casing + ',' + position + ',' + termFrequency + ',' + getRelevance() + ','
                 + relatedness + ',' + different;
     }
 
@@ -161,11 +157,24 @@ public class Term implements Comparable<Term> {
             return 1;
         }
         // same frequency, sort on term length
-        if (term.length() > o.getTerm().length()) {
+        if (text.length() > o.getText().length()) {
             return -1;
-        } else if (term.length() < o.getTerm().length()) {
+        } else if (text.length() < o.getText().length()) {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Term t) {
+            return text.equals(t.getText());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+       return text.hashCode();
     }
 }
