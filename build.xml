@@ -38,8 +38,8 @@
         <delete file="dist/lib/jrt-fs.jar" />
     </target>
     <target name="copyBats" if="isWindows">
-        <description>Copy .bat to /dist</description>
-        <copy file="extractTerms.bat" todir="dist" />
+        <description>Copy .cmd to /dist</description>
+        <copy file="extractTerms.cmd" todir="dist" />
     </target>
     <target name="copyShells" unless="isWindows">
         <description>Copy .sh to /dist</description>

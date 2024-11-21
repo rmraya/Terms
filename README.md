@@ -23,7 +23,7 @@ A binary distribution will be created in `/dist` folder.
 
 ## Usage
 
-Execute `dist/extractTerms.sh` or `dist\extractTerms.bat` and the program will display the following usage information:
+Execute `dist/extractTerms.sh` or `dist\extractTerms.cmd` and the program will display the following usage information:
 
 ``` bash
 INFO: Usage:

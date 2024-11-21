@@ -124,7 +124,7 @@ public class Term implements Comparable<Term> {
         return result;
     }
 
-    public void calcScore() {
+    public void calcTermScore() {
         casing = getCasing();
         position = getPosition();
         score = relatedness * position / (casing + (normalizedFrequency / relatedness) + (different / relatedness));

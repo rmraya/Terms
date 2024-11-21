@@ -38,6 +38,7 @@ public class TermExtractor {
 
     private static Logger logger = System.getLogger(TermExtractor.class.getName());
     private static final int WINDOW = 2;
+    private static boolean debug = false;
 
     private List<String> stopWords;
     private String srcLang;
@@ -89,6 +90,9 @@ public class TermExtractor {
                     usage();
                     System.exit(0);
                 }
+                if ("-debug".equals(args[i])) {
+                    debug = true;
+                }
             }
             if (xliff.isEmpty()) {
                 usage();
@@ -115,6 +119,7 @@ public class TermExtractor {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.5"));
             logger.log(Level.ERROR, mf.format(new String[] { e.getClass().getSimpleName(), e.getMessage() }));
         }
@@ -242,7 +247,7 @@ public class TermExtractor {
             term.calcFrequency(meanFrequency, sDeviation);
             term.calcDifferent(sentences.size());
             term.calcRelatednes(maxFrequency);
-            term.calcScore();
+            term.calcTermScore();
         }
     }
 
@@ -347,21 +352,25 @@ public class TermExtractor {
                                 }
                                 int idx = index.get(key);
                                 Term term = terms.get(idx);
-                                term.increaseFrequency();
-                                term.setScore(calcScore(candidate, term.getTermFrequency()));
+                                if (term.getText().split(" ").length > 1) {
+                                    term.increaseFrequency();
+                                }
+                                term.setScore(calcCombinedScore(tokens, minFrequency));
                             }
                         }
                     }
                 }
             }
         }
-        if (relevant) {
-            terms.removeIf(term -> term.getRelevance() < 1.0);
+        if (!debug) {
+            if (relevant) {
+                terms.removeIf(term -> term.getRelevance() < 1.0);
+            }
+            terms.removeIf(term -> term.getScore() > maxScore);
+            terms.removeIf(term -> isStopWord(term.getText()));
+            terms.removeIf(term -> term.getTermFrequency() < minFrequency);
+            terms.removeIf(term -> isNumber(term.getText()));
         }
-        terms.removeIf(term -> term.getScore() > maxScore);
-        terms.removeIf(term -> isStopWord(term.getText()));
-        terms.removeIf(term -> term.getTermFrequency() < minFrequency);
-        terms.removeIf(term -> isNumber(term.getText()));
     }
 
     private boolean isNumber(String term) {
@@ -373,24 +382,32 @@ public class TermExtractor {
         }
     }
 
-    private double calcScore(List<Token> tokens, int frequency) {
+    private double calcCombinedScore(List<Token> tokens, int frequency) {
         double prod = 1;
         double sum = 0;
         for (int i = 0; i < tokens.size(); i++) {
             Token token = tokens.get(i);
+            int idx = index.get(token.getLower());
+            Term term = terms.get(idx);
             if (!token.isStopWord()) {
-                int idx = index.get(token.getLower());
-                Term term = terms.get(idx);
                 prod *= term.getScore();
                 sum += term.getScore();
             } else {
-                Token tokenBefore = tokens.get(i - 1);
-                int idx = index.get(tokenBefore.getLower());
-                Term termBefore = terms.get(idx);
-                Token tokenAfter = tokens.get(i + 1);
-                idx = index.get(tokenAfter.getLower());
-                Term termAfter = terms.get(idx);
-                double bigramProbability = termBefore.getScore() * termAfter.getScore();
+                double probBefore = 0;
+                double probAfter = 0;
+                if (i > 0) {
+                    Token tokenBefore = tokens.get(i - 1);
+                    idx = index.get(tokenBefore.getLower());
+                    Term termBefore = terms.get(idx);
+                    probBefore = termBefore.getScore();
+                }
+                if (i < tokens.size() - 1) {
+                    Token tokenAfter = tokens.get(i + 1);
+                    idx = index.get(tokenAfter.getLower());
+                    Term termAfter = terms.get(idx);
+                    probAfter = termAfter.getScore();
+                }
+                double bigramProbability = probBefore * probAfter;
                 prod *= 1 + (1 - bigramProbability);
                 sum += (1 - bigramProbability);
             }
