@@ -78,12 +78,24 @@ tasks.register('dist') {
         def os = System.getProperty('os.name').toLowerCase()
         if (os.contains('win')) {
             copy {
-                from 'extractTerms.cmd'
+                from('extractTerms.cmd')
+                into 'dist'
+            }
+            copy {
+                from('bilingualExtractor.cmd')
                 into 'dist'
             }
         } else {
             copy {
                 from('extractTerms.sh') {
+                    filePermissions {
+                        unix('rwxr-xr-x')
+                    }
+                }
+                into 'dist'
+            }
+            copy {
+                from('bilingualExtractor.sh') {
                     filePermissions {
                         unix('rwxr-xr-x')
                     }

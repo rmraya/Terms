@@ -46,6 +46,10 @@ public class Term implements Comparable<Term> {
         return text;
     }
 
+    public Vector<Integer> getOffsetSentences() {
+        return offsetSentences;
+    }
+
     public void setSentence(int i) {
         offsetSentences.add(i);
     }

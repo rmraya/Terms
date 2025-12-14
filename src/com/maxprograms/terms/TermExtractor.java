@@ -50,6 +50,8 @@ public class TermExtractor {
     private BreakIterator wordsIterator;
     private Locale locale;
     private List<Term> terms;
+    private List<Integer> sentenceToSegmentNumber;
+    private int currentSegmentNumber;
 
     public static void main(String[] args) {
         args = Utils.fixPath(args);
@@ -147,14 +149,20 @@ public class TermExtractor {
         logger.log(Level.INFO, Messages.getString("TermExtractor.2"));
     }
 
-    private List<Term> getTerms() {
+    public List<Term> getTerms() {
         return terms;
+    }
+
+    public List<Integer> getSentenceToSegmentMap() {
+        return sentenceToSegmentNumber;
     }
 
     public TermExtractor(String xliffFile, int maxTermLenght, int minFrequency, double maxScore, boolean relevant)
             throws IOException, SAXException, ParserConfigurationException {
         sentences = new Vector<>();
         chunks = new Vector<>();
+        sentenceToSegmentNumber = new Vector<>();
+        currentSegmentNumber = 0;
 
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xliffFile);
@@ -177,6 +185,7 @@ public class TermExtractor {
 
     private void buildSentences(Element e) {
         if ("segment".equals(e.getName())) {
+            currentSegmentNumber++;
             Element source = e.getChild("source");
             if (source == null) {
                 // Skip segments without source element
@@ -190,6 +199,7 @@ public class TermExtractor {
                         .next()) {
                     String sentence = sourceText.substring(start, end).replace('\u00A0', ' ');
                     sentences.add(sentence.strip());
+                    sentenceToSegmentNumber.add(currentSegmentNumber);
                 }
             }
         } else {
@@ -381,6 +391,7 @@ public class TermExtractor {
                                 Term term = terms.get(idx);
                                 if (term.getText().split(" ").length > 1) {
                                     term.increaseFrequency();
+                                    term.setSentence(i);  // Track which sentence this multi-word term appears in
                                 }
                                 // Use actual term frequency for score calculation
                                 term.setScore(calcCombinedScore(candidate, term.getTermFrequency()));
@@ -390,15 +401,14 @@ public class TermExtractor {
                 }
             }
         }
-        if (!debug) {
-            if (relevant) {
-                terms.removeIf(term -> term.getRelevance() < 1.0);
-            }
-            terms.removeIf(term -> term.getScore() > maxScore);
-            terms.removeIf(term -> isStopWord(term.getText()));
-            terms.removeIf(term -> term.getTermFrequency() < minFrequency);
-            terms.removeIf(term -> isNumber(term.getText()));
+        if (relevant) {
+            terms.removeIf(term -> term.getRelevance() < 1.0);
         }
+        terms.removeIf(term -> term.getScore() > maxScore);
+        terms.removeIf(term -> isStopWord(term.getText()));
+        terms.removeIf(term -> term.getTermFrequency() < minFrequency);
+        terms.removeIf(term -> isNumber(term.getText()));
+        terms.removeIf(term -> term.getText().length() < 2);
     }
 
     private boolean isNumber(String term) {
