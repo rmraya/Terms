@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Maxprograms.
+ * Copyright (c) 2024 - 2025 Maxprograms.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 1.0 which accompanies this distribution,
@@ -22,7 +22,7 @@ public class Term implements Comparable<Term> {
     private Vector<Integer> offsetSentences;
     private int termFrequency;
     private int acronymFrequency;
-    private int upperCaseFreqquency;
+    private int upperCaseFrequency;
     private double position;
     private double normalizedFrequency;
     private Map<String, Integer> leftWords;
@@ -37,7 +37,7 @@ public class Term implements Comparable<Term> {
         offsetSentences = new Vector<>();
         termFrequency = 0;
         acronymFrequency = 0;
-        upperCaseFreqquency = 0;
+        upperCaseFrequency = 0;
         leftWords = new HashMap<>();
         rightWords = new HashMap<>();
     }
@@ -59,7 +59,7 @@ public class Term implements Comparable<Term> {
     }
 
     public void increaseUpperCase() {
-        upperCaseFreqquency++;
+        upperCaseFrequency++;
     }
 
     public int getTermFrequency() {
@@ -70,12 +70,12 @@ public class Term implements Comparable<Term> {
         return acronymFrequency;
     }
 
-    public int getUpperCaseFreqquency() {
-        return upperCaseFreqquency;
+    public int getUpperCaseFrequency() {
+        return upperCaseFrequency;
     }
 
     private double getCasing() {
-        return Math.max(upperCaseFreqquency, acronymFrequency) / (1 + Math.log(termFrequency));
+        return Math.max(upperCaseFrequency, acronymFrequency) / (1 + Math.log(termFrequency));
     }
 
     public double getPosition() {
@@ -127,7 +127,17 @@ public class Term implements Comparable<Term> {
     public void calcTermScore() {
         casing = getCasing();
         position = getPosition();
-        score = relatedness * position / (casing + (normalizedFrequency / relatedness) + (different / relatedness));
+        // Prevent division by zero
+        if (relatedness == 0) {
+            score = 0.0;
+        } else {
+            double denominator = casing + (normalizedFrequency / relatedness) + (different / relatedness);
+            if (denominator == 0) {
+                score = 0.0;
+            } else {
+                score = (relatedness * position) / denominator;
+            }
+        }
     }
 
     public String getData() {
@@ -145,18 +155,19 @@ public class Term implements Comparable<Term> {
 
     @Override
     public int compareTo(Term o) {
-        if (score > o.getScore()) {
-            return 1;
-        } else if (score < o.getScore()) {
+        // Lower scores are better in YAKE, so sort ascending by score
+        if (score < o.getScore()) {
             return -1;
+        } else if (score > o.getScore()) {
+            return 1;
         }
-        // same score, sort on term frequency
+        // same score, sort on term frequency (higher is better)
         if (termFrequency > o.getTermFrequency()) {
             return -1;
         } else if (termFrequency < o.getTermFrequency()) {
             return 1;
         }
-        // same frequency, sort on term length
+        // same frequency, sort on term length (longer is better)
         if (text.length() > o.getText().length()) {
             return -1;
         } else if (text.length() < o.getText().length()) {

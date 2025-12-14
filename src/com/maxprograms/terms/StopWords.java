@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Maxprograms.
+ * Copyright (c) 2024 - 2025 Maxprograms.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 1.0 which accompanies this distribution,
@@ -57,11 +57,18 @@ public class StopWords {
     private static void loadWordList() throws IOException {
         StringBuilder builder = new StringBuilder();
         try (InputStream stream = StopWords.class.getResourceAsStream("stopWords.json")) {
+            if (stream == null) {
+                throw new IOException("stopWords.json resource not found");
+            }
             try (InputStreamReader reader = new InputStreamReader(stream)) {
                 try (BufferedReader buffer = new BufferedReader(reader)) {
                     String line = "";
                     while ((line = buffer.readLine()) != null) {
+                        if (!builder.isEmpty()) {
+                            builder.append('\n');
+                        } 
                         builder.append(line);
+
                     }
                 }
             }

@@ -1,0 +1,102 @@
+plugins {
+    id 'java'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['src']
+            exclude '**/*.java'
+        }
+    }
+}
+
+dependencies {
+    implementation files('lib/xmljava.jar')
+    implementation files('lib/json.jar')
+}
+
+// Disable all caching for fresh builds
+gradle.startParameter.buildCacheEnabled = false
+tasks.configureEach {
+    outputs.upToDateWhen { false }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Disable incremental compilation for fresh builds
+    options.incremental = false
+}
+
+jar {
+    archiveBaseName = 'terms'
+    destinationDirectory = file('lib')
+}
+
+// Clean task to remove build outputs
+tasks.named('clean') {
+    doFirst {
+        delete 'lib/terms.jar'
+        delete 'dist'
+    }
+}
+
+// Task to create jlink distribution
+tasks.register('jlink', Exec) {
+    dependsOn jar
+    
+    doFirst {
+        delete 'dist'
+    }
+    
+    commandLine 'jlink',
+        '--module-path', "lib:${System.getProperty('java.home')}/jmods",
+        '--add-modules', 'terms',
+        '--output', 'dist',
+        '--no-man-pages',
+        '--no-header-files'
+    
+    doLast {
+        delete 'dist/lib/jrt-fs.jar'
+    }
+}
+
+// Task to create complete distribution
+tasks.register('dist') {
+    dependsOn jlink
+    
+    doLast {
+        def os = System.getProperty('os.name').toLowerCase()
+        if (os.contains('win')) {
+            copy {
+                from 'extractTerms.cmd'
+                into 'dist'
+            }
+        } else {
+            copy {
+                from('extractTerms.sh') {
+                    filePermissions {
+                        unix('rwxr-xr-x')
+                    }
+                }
+                into 'dist'
+            }
+        }
+        copy {
+            from 'LICENSE'
+            into 'dist'
+        }
+    }
+}
+
+// Default task
+defaultTasks 'dist'

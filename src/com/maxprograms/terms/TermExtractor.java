@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Maxprograms.
+ * Copyright (c) 2024 - 2025 Maxprograms.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 1.0 which accompanies this distribution,
@@ -57,8 +57,8 @@ public class TermExtractor {
         String xliff = "";
         String output = "";
         int minFrequency = 3;
-        double maxScore = 0.001;
-        boolean relevant = true;
+        double maxScore = 10.0;
+        boolean relevant = false;
         int maxTermLenght = 3;
 
         try {
@@ -75,15 +75,15 @@ public class TermExtractor {
                 if ("-maxScore".equals(args[i]) && i + 1 < args.length) {
                     maxScore = Double.parseDouble(args[i + 1]);
                 }
-                if ("-generic".equals(args[i])) {
-                    relevant = false;
+                if ("-relevant".equals(args[i])) {
+                    relevant = true;
                 }
-                if ("-maxLenght".equals(args[i]) && i + 1 < args.length) {
+                if ("-maxLength".equals(args[i]) && i + 1 < args.length) {
                     maxTermLenght = Integer.parseInt(args[i + 1]);
                 }
                 if ("-version".equals(args[i])) {
                     MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.4"));
-                    logger.log(Level.INFO, mf.format(new String[] { Constans.VERSION, Constans.BUILD }));
+                    logger.log(Level.INFO, mf.format(new String[] { Constants.VERSION, Constants.BUILD }));
                     System.exit(0);
                 }
                 if ("-help".equals(args[i])) {
@@ -96,6 +96,24 @@ public class TermExtractor {
             }
             if (xliff.isEmpty()) {
                 usage();
+                System.exit(1);
+            }
+            // Validate parameters
+            if (minFrequency < 1) {
+                logger.log(Level.ERROR, "Minimum frequency must be at least 1");
+                System.exit(1);
+            }
+            if (maxScore <= 0) {
+                logger.log(Level.ERROR, "Maximum score must be greater than 0");
+                System.exit(1);
+            }
+            if (maxTermLenght < 1) {
+                logger.log(Level.ERROR, "Maximum term length must be at least 1");
+                System.exit(1);
+            }
+            File xliffFile = new File(xliff);
+            if (!xliffFile.exists()) {
+                logger.log(Level.ERROR, "File not found: " + xliff);
                 System.exit(1);
             }
             if (output.isEmpty()) {
@@ -154,11 +172,16 @@ public class TermExtractor {
         termStatistics();
         featureComputation();
         generateCandidates(maxTermLenght, minFrequency, maxScore, relevant);
+        deduplicateTerms();
     }
 
     private void buildSentences(Element e) {
         if ("segment".equals(e.getName())) {
             Element source = e.getChild("source");
+            if (source == null) {
+                // Skip segments without source element
+                return;
+            }
             String sourceText = Utils.pureText(source);
             if (!sourceText.isBlank()) {
                 sentenceIterator.setText(sourceText);
@@ -232,15 +255,18 @@ public class TermExtractor {
     private void featureComputation() {
         List<Integer> frequencies = new Vector<>();
         int maxFrequency = 0;
+        int sumFrequency = 0;
         for (int i = 0; i < terms.size(); i++) {
             Term term = terms.get(i);
             int frequency = term.getTermFrequency();
             frequencies.add(frequency);
+            sumFrequency += frequency;
             if (frequency > maxFrequency) {
                 maxFrequency = frequency;
             }
         }
-        double meanFrequency = Utils.median(frequencies);
+        // Use mean frequency instead of median as per YAKE algorithm
+        double meanFrequency = terms.size() > 0 ? (double) sumFrequency / terms.size() : 0;
         double sDeviation = standardDeviation(frequencies.toArray(new Integer[frequencies.size()]));
         for (int i = 0; i < terms.size(); i++) {
             Term term = terms.get(i);
@@ -321,7 +347,8 @@ public class TermExtractor {
         for (int num : frequencies) {
             deviations += Math.pow(num - mean, 2);
         }
-        double variance = deviations / length;
+        // Use sample standard deviation (n-1) instead of population (n)
+        double variance = length > 1 ? deviations / (length - 1) : 0;
         return Math.sqrt(variance);
     }
 
@@ -355,7 +382,8 @@ public class TermExtractor {
                                 if (term.getText().split(" ").length > 1) {
                                     term.increaseFrequency();
                                 }
-                                term.setScore(calcCombinedScore(tokens, minFrequency));
+                                // Use actual term frequency for score calculation
+                                term.setScore(calcCombinedScore(candidate, term.getTermFrequency()));
                             }
                         }
                     }
@@ -382,11 +410,111 @@ public class TermExtractor {
         }
     }
 
-    private double calcCombinedScore(List<Token> tokens, int frequency) {
+    private void deduplicateTerms() {
+        int originalCount = terms.size();
+        Map<String, Term> normalized = new HashMap<>();
+        List<Term> deduplicated = new Vector<>();
+        
+        // First pass: merge exact case-insensitive duplicates
+        for (Term term : terms) {
+            String normalizedKey = term.getText().toLowerCase(locale);
+            if (normalized.containsKey(normalizedKey)) {
+                Term existing = normalized.get(normalizedKey);
+                // Keep the term with better score, or if same score, keep the one with higher frequency
+                if (term.getScore() < existing.getScore() || 
+                    (term.getScore() == existing.getScore() && term.getTermFrequency() > existing.getTermFrequency())) {
+                    if (debug) {
+                        logger.log(Level.INFO, "Replacing '" + existing.getText() + "' with '" + term.getText() + "' (better score/frequency)");
+                    }
+                    normalized.put(normalizedKey, term);
+                }
+            } else {
+                normalized.put(normalizedKey, term);
+            }
+        }
+        
+        // Second pass: merge similar terms using Levenshtein distance
+        List<Term> uniqueTerms = new Vector<>(normalized.values());
+        boolean[] merged = new boolean[uniqueTerms.size()];
+        
+        for (int i = 0; i < uniqueTerms.size(); i++) {
+            if (merged[i]) {
+                continue;
+            }
+            Term term1 = uniqueTerms.get(i);
+            String text1 = term1.getText().toLowerCase(locale);
+            Term bestTerm = term1;
+            
+            // Look for similar terms
+            for (int j = i + 1; j < uniqueTerms.size(); j++) {
+                if (merged[j]) {
+                    continue;
+                }
+                Term term2 = uniqueTerms.get(j);
+                String text2 = term2.getText().toLowerCase(locale);
+                
+                // Check if terms are similar based on Levenshtein distance
+                if (areSimilar(text1, text2)) {
+                    merged[j] = true;
+                    if (debug) {
+                        logger.log(Level.INFO, "Merging similar terms: '" + text1 + "' and '" + text2 + "'");
+                    }
+                    // Keep the term with better score
+                    if (term2.getScore() < bestTerm.getScore() ||
+                        (term2.getScore() == bestTerm.getScore() && term2.getTermFrequency() > bestTerm.getTermFrequency())) {
+                        bestTerm = term2;
+                    }
+                }
+            }
+            deduplicated.add(bestTerm);
+        }
+        
+        if (debug) {
+            logger.log(Level.INFO, "Deduplication: " + originalCount + " terms -> " + deduplicated.size() + " terms (removed " + (originalCount - deduplicated.size()) + " duplicates)");
+        }
+        
+        // Update terms list and index
+        terms = deduplicated;
+        index.clear();
+        for (int i = 0; i < terms.size(); i++) {
+            index.put(terms.get(i).getText().toLowerCase(locale), i);
+        }
+    }
+    
+    private boolean areSimilar(String text1, String text2) {
+        // Same text is not similar, it's identical (already handled)
+        if (text1.equals(text2)) {
+            return false;
+        }
+        
+        // Only use Levenshtein distance for fuzzy matching (typos, minor variations)
+        // Don't merge based on substring relationships - those are different terms
+        int distance = LevenshteinDistance.distance(text1, text2);
+        int maxLength = Math.max(text1.length(), text2.length());
+        
+        // Only consider similar if:
+        // 1. Length difference is small (no more than 2 characters)
+        // 2. Levenshtein distance is very small (1-2 edits for typos)
+        // This prevents merging "learning" with "machine learning" 
+        if (Math.abs(text1.length() - text2.length()) > 2) {
+            return false;
+        }
+        
+        // For very similar lengths, allow only 1-2 character differences (typos)
+        // Use 90% similarity threshold - much stricter than before
+        double similarity = 1.0 - ((double) distance / maxLength);
+        return similarity > 0.90 && distance <= 2;
+    }
+
+    private double calcCombinedScore(List<Token> candidateTokens, int termFrequency) {
         double prod = 1;
         double sum = 0;
-        for (int i = 0; i < tokens.size(); i++) {
-            Token token = tokens.get(i);
+        // Ensure we don't divide by zero
+        if (termFrequency == 0) {
+            termFrequency = 1;
+        }
+        for (int i = 0; i < candidateTokens.size(); i++) {
+            Token token = candidateTokens.get(i);
             int idx = index.get(token.getLower());
             Term term = terms.get(idx);
             if (!token.isStopWord()) {
@@ -396,13 +524,13 @@ public class TermExtractor {
                 double probBefore = 0;
                 double probAfter = 0;
                 if (i > 0) {
-                    Token tokenBefore = tokens.get(i - 1);
+                    Token tokenBefore = candidateTokens.get(i - 1);
                     idx = index.get(tokenBefore.getLower());
                     Term termBefore = terms.get(idx);
                     probBefore = termBefore.getScore();
                 }
-                if (i < tokens.size() - 1) {
-                    Token tokenAfter = tokens.get(i + 1);
+                if (i < candidateTokens.size() - 1) {
+                    Token tokenAfter = candidateTokens.get(i + 1);
                     idx = index.get(tokenAfter.getLower());
                     Term termAfter = terms.get(idx);
                     probAfter = termAfter.getScore();
@@ -412,6 +540,6 @@ public class TermExtractor {
                 sum += (1 - bigramProbability);
             }
         }
-        return prod / (frequency * (sum + 1));
+        return prod / (termFrequency * (sum + 1));
     }
 }

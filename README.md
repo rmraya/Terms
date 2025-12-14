@@ -7,7 +7,7 @@ This project is based on the paper *YAKE! Keyword extraction from single documen
 ## Requirements for building
 
 - Java 21 (get it from [https://adoptium.net/](https://adoptium.net/))
-- Apache Ant 1.10.14 or newer (get it from [https://ant.apache.org/bindownload.cgi](https://ant.apache.org/bindownload.cgi))
+- Gradle 9.2 or newer (get it from [https://gradle.org/install/](https://gradle.org/install/))
 
 ### Building
 
@@ -16,7 +16,7 @@ Follow these steps to build the project:
 ```bash
 git clone https://github.com/rmraya/Terms.git
 cd Terms
-ant
+gradle
 ```
 
 A binary distribution will be created in `/dist` folder.
@@ -28,7 +28,7 @@ Execute `dist/extractTerms.sh` or `dist\extractTerms.cmd` and the program will d
 ``` bash
 INFO: Usage:
 
-    termExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLenght length] [-maxScore score] [-generic]
+    termExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLength length] [-maxScore score] [-generic] [-debug]
 
 Where:
 
@@ -36,13 +36,29 @@ Where:
         -help:      (optional) Display this usage information and exit
         -xliff:     The XLIFF file to process
         -output:    (optional) The output file where the terms will be written
-        -maxLenght: (optional) The maximum number of words in a term. Default: 3
+        -maxLength: (optional) The maximum number of words in a term. Default: 3
         -minFreq:   (optional) The minimum frequency for a term to be considered. Default: 3
         -maxScore:  (optional) The maximum score for a term to be considered. Default: 0.001
         -generic:   (optional) Include terms with relevance < 1.0. Default: false
+        -debug:     (optional) Enable debug mode with detailed logging. Default: false
 ```
 
-By default, the program extracts terms with a minimum frequency of 3, a maximum length of 3 words, and a maximum score of 0.001. Terms with a relevance less than 1.0 are excluded by default.
+By default, the program extracts terms with a minimum frequency of 3, a maximum length of 3 words, and a maximum score of 10.0. All terms (both single-word and multi-word) are included by default.
+
+Use the `-relevant` flag to exclude single-word terms and focus only on multi-word terms and proper nouns (words with unusual capitalization patterns).
+
+### Term Deduplication
+
+The program automatically deduplicates extracted terms using two strategies:
+
+1. **Case-insensitive matching**: Merges terms that differ only in capitalization (e.g., "Machine Learning" and "machine learning")
+2. **Similarity matching**: Merges terms that are similar based on Levenshtein distance with 85% similarity threshold, including:
+   - Substring relationships (e.g., "learning" vs "machine learning")
+   - Minor spelling variations
+
+When duplicates are found, the program keeps the variant with the lowest score (best in YAKE), or if scores are equal, the one with highest frequency.
+
+### Output Format
 
 The program writes a CSV (comma separated values) file with the same name as the supplied XLIFF file with the `.csv` extension, containing the following columns:
 

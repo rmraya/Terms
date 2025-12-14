@@ -1,5 +1,8 @@
 .DS_Store
 .scannerwork
+.gradle
 /out
+/build
 /dist
 release
+yakeTest.txt*
