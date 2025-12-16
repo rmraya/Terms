@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff srcLang="en" xmlns:mtc="urn:oasis:names:tc:xliff:matches:2.0" version="2.0" xmlns:mda="urn:oasis:names:tc:xliff:metadata:2.0" trgLang="es" xmlns="urn:oasis:names:tc:xliff:document:2.0">
+  <file original="com/maxprograms/terms/terms.properties" id="0">
+    <skeleton>VGVybUV4dHJhY3Rvci4xPSUlJTAlJSUKVGVybUV4dHJhY3Rvci4yPSUlJTElJSUKVGVybUV4dHJh
+Y3Rvci4zPSUlJTIlJSUKVGVybUV4dHJhY3Rvci40PSUlJTMlJSUKVGVybUV4dHJhY3Rvci41PSUl
+JTQlJSUKVGVybUV4dHJhY3Rvci42PSUlJTUlJSUKVGVybUV4dHJhY3Rvci43PSUlJTYlJSUKVGVy
+bUV4dHJhY3Rvci44PSUlJTclJSUKVGVybUV4dHJhY3Rvci45PSUlJTglJSUKVGVybUV4dHJhY3Rv
+ci4xMD0lJSU5JSUlClRlcm1FeHRyYWN0b3IuMTE9JSUlMTAlJSUKVGVybUV4dHJhY3Rvci4xMj0l
+JSUxMSUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLmhlbHA9JSUlMTIlJSUKQmlsaW5ndWFsRXh0cmFj
+dGlvbi4xPSUlJTEzJSUlCkJpbGluZ3VhbEV4dHJhY3Rpb24uMj0lJSUxNCUlJQpCaWxpbmd1YWxF
+eHRyYWN0aW9uLjM9JSUlMTUlJSUKQmlsaW5ndWFsRXh0cmFjdGlvbi40PSUlJTE2JSUlCkJpbGlu
+Z3VhbEV4dHJhY3Rpb24uNT0lJSUxNyUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLjY9JSUlMTglJSUK
+QmlsaW5ndWFsRXh0cmFjdGlvbi43PSUlJTE5JSUlCkJpbGluZ3VhbEV4dHJhY3Rpb24uOD0lJSUy
+MCUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLjk9JSUlMjElJSUKQmlsaW5ndWFsRXh0cmFjdGlvbi4x
+MD0lJSUyMiUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLjExPSUlJTIzJSUlCkJpbGluZ3VhbEV4dHJh
+Y3Rpb24uMTI9JSUlMjQlJSUKQmlsaW5ndWFsRXh0cmFjdGlvbi4xMz0lJSUyNSUlJQpCaWxpbmd1
+YWxFeHRyYWN0aW9uLjE0PSUlJTI2JSUlCkJpbGluZ3VhbEV4dHJhY3Rpb24uMTU9JSUlMjclJSUK
+QmlsaW5ndWFsRXh0cmFjdGlvbi4xNj0lJSUyOCUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLjE3PSUl
+JTI5JSUlCkJpbGluZ3VhbEV4dHJhY3Rpb24uMTg9JSUlMzAlJSUKQmlsaW5ndWFsRXh0cmFjdGlv
+bi4xOT0lJSUzMSUlJQpCaWxpbmd1YWxFeHRyYWN0aW9uLjIwPSUlJTMyJSUlCkJpbGluZ3VhbEV4
+dHJhY3Rpb24uMjE9JSUlMzMlJSUKQmlsaW5ndWFsRXh0cmFjdGlvbi4yMj0lJSUzNCUlJQpCaWxp
+bmd1YWxFeHRyYWN0aW9uLjIzPSUlJTM1JSUlCkJpbGluZ3VhbEV4dHJhY3Rpb24uMjQ9JSUlMzYl
+JSUK</skeleton>
+    <mda:metadata>
+      <mda:metaGroup category="format">
+        <mda:meta type="datatype">javapropertyresourcebundle</mda:meta>
+      </mda:metaGroup>
+      <mda:metaGroup category="tool">
+        <mda:meta type="tool-id">OpenXLIFF</mda:meta>
+        <mda:meta type="tool-name">OpenXLIFF Filters</mda:meta>
+        <mda:meta type="tool-version">3.13.0 20230829_0823</mda:meta>
+      </mda:metaGroup>
+      <mda:metaGroup category="PI">
+        <mda:meta type="encoding">utf-8</mda:meta>
+      </mda:metaGroup>
+    </mda:metadata>
+    <unit id="0">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.1</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="0">
+        <source xml:space="preserve">\#,term,score,casing,position,frequency,relevance,relatedness,different
+</source>
+        <target xml:space="preserve">#,término,puntaje,capitalización,posición,frecuencia,relevancia,relación,diferente
+</target>
+      </segment>
+    </unit>
+    <unit id="1">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.2</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="1">
+        <source xml:space="preserve">Usage:
+
+    termExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLength length] [-maxScore score] [-relevant] [-debug]
+
+Where:
+
+        -version:   (optional) Display version information and exit
+        -help:      (optional) Display this usage information and exit
+        -xliff:     The XLIFF file to process
+        -output:    (optional) The output file where the terms will be written
+        -maxLength: (optional) The maximum number of words in a term. Default: 3
+        -minFreq:   (optional) The minimum frequency for a term to be considered. Default: 3
+        -maxScore:  (optional) The maximum score for a term to be considered. Default: 10.0
+        -relevant:  (optional) Exclude single-word terms (only show multi-word terms and proper nouns). Default: false
+        -debug:     (optional) Enable debug mode with detailed logging. Default: false
+</source>
+        <target xml:space="preserve">Uso:
+
+    termExtractor [-version] [-help] -xliff archivoXliff [-output archivoCsv] [-minFreq frecuencia] [-maxLength largo] [-maxScore puntaje] [-relevant] [-debug]
+
+Donde:
+
+        -version:   (opcional) Mostrar información de versión y salir
+        -help:      (opcional) Mostrar esta información de uso y salir
+        -xliff:     Archivo XLIFF a procesar
+        -output:    (opcional) Archivo en donde guardar los términos
+        -maxLength: (opcional) Máximo número de palabras en un término. Predeterminado: 3
+        -minFreq:   (opcional) Frecuencia mínima para considerar un término. Predeterminado: 3
+        -maxScore:  (opcional) Puntaje máximo para considerar un término. Predeterminado: 10.0
+        -relevant:  (opcional) Excluir términos de una palabra (solo mostrar términos compuestos y nombres propios). Predeterminado: false
+        -debug:     (opcional) Habilitar modo de depuración con registros detallados. Predeterminado: false
+</target>
+      </segment>
+    </unit>
+    <unit id="2">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.3</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="2">
+        <source xml:space="preserve">Selected file is not an XLIFF 2.x document</source>
+        <target xml:space="preserve">El archivo seleccionado no es un documento XLIFF 2.x</target>
+      </segment>
+    </unit>
+    <unit id="3">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.4</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="3">
+        <source xml:space="preserve">Version: {0} Build: {1}</source>
+        <target xml:space="preserve">Versión: {0} Compilación: {1}</target>
+      </segment>
+    </unit>
+    <unit id="4">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.5</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="4">
+        <source xml:space="preserve">Exception {0} was thrown while processing XLIFF file {1}</source>
+        <target xml:space="preserve">Una excepción {0} se recibió al procesar el archivo XLIFF {1}</target>
+      </segment>
+    </unit>
+    <unit id="5">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.6</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="5">
+        <source xml:space="preserve">Minimum frequency must be at least 1</source>
+        <target xml:space="preserve">La frecuencia mínima debe ser al menos 1</target>
+      </segment>
+    </unit>
+    <unit id="6">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.7</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="6">
+        <source xml:space="preserve">Maximum score must be greater than 0</source>
+        <target xml:space="preserve">La puntuación máxima debe ser mayor que 0</target>
+      </segment>
+    </unit>
+    <unit id="7">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.8</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="7">
+        <source xml:space="preserve">Maximum term length must be at least 1</source>
+        <target xml:space="preserve">La longitud máxima del término debe ser al menos 1</target>
+      </segment>
+    </unit>
+    <unit id="8">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.9</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="8">
+        <source xml:space="preserve">File not found: {0}</source>
+        <target xml:space="preserve">Archivo no encontrado: {0}</target>
+      </segment>
+    </unit>
+    <unit id="9">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.10</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="9">
+        <source xml:space="preserve">Replacing ''{0}'' with ''{1}'' (better score/frequency)</source>
+        <target xml:space="preserve">Reemplazando ''{0}'' por ''{1}'' (mejor puntuación/frecuencia)</target>
+      </segment>
+    </unit>
+    <unit id="10">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.11</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="10">
+        <source xml:space="preserve">Merging similar terms: ''{0}'' and ''{1}''</source>
+        <target xml:space="preserve">Fusionando términos similares: ''{0}'' y ''{1}''</target>
+      </segment>
+    </unit>
+    <unit id="11">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">TermExtractor.12</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="11">
+        <source xml:space="preserve">Deduplication: {0} terms -&gt; {1} terms (removed {2} duplicates)</source>
+        <target xml:space="preserve">Deduplicación: {0} términos -&gt; {1} términos (eliminados {2} duplicados)</target>
+      </segment>
+    </unit>
+    <unit id="12">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.help</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="12">
+        <source xml:space="preserve">Usage:
+
+    bilingualExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLength length] [-maxScore score] [-minCoOccurrence N] [-maxPairs N] [-minCoOccurrenceRatio ratio] [-debug]
+
+Where:
+
+        -version:              (optional) Display version information and exit
+        -help:                 (optional) Display this usage information and exit
+        -xliff:                The XLIFF file to process (must contain translated segments)
+        -output:               (optional) The output CSV file for term pairs. Default: &lt;xliff&gt;_bilingual.csv
+        -maxLength:            (optional) The maximum number of words in a term. Default: 5
+        -minFreq:              (optional) The minimum frequency for a term to be considered. Default: 3
+        -maxScore:             (optional) The maximum score for a term to be considered. Default: 10.0
+        -minCoOccurrence:      (optional) Minimum number of shared segments for term pairs. Default: 1
+        -maxPairs:             (optional) Maximum number of target terms per source term (0 = no limit). Default: 0
+        -minCoOccurrenceRatio: (optional) Minimum ratio of co-occurrence to term frequency (0.0-1.0). Default: 0.7
+        -debug:                (optional) Enable debug mode with detailed logging. Default: false
+
+Note: Only multi-word terms and proper nouns are extracted for bilingual term pairs.
+</source>
+        <target xml:space="preserve">Uso:
+
+    bilingualExtractor [-version] [-help] -xliff archivoXliff [-output archivoCsv] [-minFreq frecuencia] [-maxLength largo] [-maxScore puntaje] [-minCoOccurrence N] [-maxPairs N] [-minCoOccurrenceRatio ratio] [-debug]
+
+Donde:
+
+        -version:              (opcional) Mostrar información de versión y salir
+        -help:                 (opcional) Mostrar esta información de uso y salir
+        -xliff:                Archivo XLIFF a procesar (debe contener segmentos traducidos)
+        -output:               (opcional) Archivo CSV de pares de términos. Predeterminado: &lt;xliff&gt;_bilingual.csv
+        -maxLength:            (opcional) Máximo número de palabras en un término. Predeterminado: 5
+        -minFreq:              (opcional) Frecuencia mínima para considerar un término. Predeterminado: 3
+        -maxScore:             (opcional) Puntaje máximo para considerar un término. Predeterminado: 10.0
+        -minCoOccurrence:      (opcional) Número mínimo de segmentos compartidos para pares de términos. Predeterminado: 1
+        -maxPairs:             (opcional) Número máximo de términos objetivo por término origen (0 = sin límite). Predeterminado: 0
+        -minCoOccurrenceRatio: (opcional) Proporción mínima de co-ocurrencia a frecuencia del término (0.0-1.0). Predeterminado: 0.7
+        -debug:                (opcional) Habilitar modo de depuración con registros detallados. Predeterminado: false
+
+Nota: Solo se extraen términos compuestos y nombres propios para pares de términos bilingües.
+</target>
+      </segment>
+    </unit>
+    <unit id="13">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.1</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="13">
+        <source xml:space="preserve">Minimum frequency must be at least 1</source>
+        <target xml:space="preserve">La frecuencia mínima debe ser al menos 1</target>
+      </segment>
+    </unit>
+    <unit id="14">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.2</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="14">
+        <source xml:space="preserve">Maximum score must be greater than 0</source>
+        <target xml:space="preserve">La puntuación máxima debe ser mayor que 0</target>
+      </segment>
+    </unit>
+    <unit id="15">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.3</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="15">
+        <source xml:space="preserve">Maximum term length must be at least 1</source>
+        <target xml:space="preserve">La longitud máxima del término debe ser al menos 1</target>
+      </segment>
+    </unit>
+    <unit id="16">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.4</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="16">
+        <source xml:space="preserve">Minimum co-occurrence must be at least 1</source>
+        <target xml:space="preserve">La co-ocurrencia mínima debe ser al menos 1</target>
+      </segment>
+    </unit>
+    <unit id="17">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.5</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="17">
+        <source xml:space="preserve">Maximum pairs cannot be negative</source>
+        <target xml:space="preserve">El máximo de pares no puede ser negativo</target>
+      </segment>
+    </unit>
+    <unit id="18">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.6</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="18">
+        <source xml:space="preserve">Minimum co-occurrence ratio must be between 0.0 and 1.0</source>
+        <target xml:space="preserve">La relación mínima de co-ocurrencia debe estar entre 0.0 y 1.0</target>
+      </segment>
+    </unit>
+    <unit id="19">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.7</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="19">
+        <source xml:space="preserve">File not found: {0}</source>
+        <target xml:space="preserve">Archivo no encontrado: {0}</target>
+      </segment>
+    </unit>
+    <unit id="20">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.8</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="20">
+        <source xml:space="preserve">Bilingual term extraction completed. Output: {0}</source>
+        <target xml:space="preserve">Extracción de términos bilingües completada. Salida: {0}</target>
+      </segment>
+    </unit>
+    <unit id="21">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.9</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="21">
+        <source xml:space="preserve">Error during extraction</source>
+        <target xml:space="preserve">Error durante la extracción</target>
+      </segment>
+    </unit>
+    <unit id="22">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.10</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="22">
+        <source xml:space="preserve">Source language: {0}, Target language: {1}</source>
+        <target xml:space="preserve">Idioma origen: {0}, Idioma destino: {1}</target>
+      </segment>
+    </unit>
+    <unit id="23">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.11</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="23">
+        <source xml:space="preserve">No segments with state='final' found in XLIFF file</source>
+        <target xml:space="preserve">No se encontraron segmentos con state='final' en el archivo XLIFF</target>
+      </segment>
+    </unit>
+    <unit id="24">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.12</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="24">
+        <source xml:space="preserve">Found {0} final segments</source>
+        <target xml:space="preserve">Se encontraron {0} segmentos finales</target>
+      </segment>
+    </unit>
+    <unit id="25">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.13</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="25">
+        <source xml:space="preserve">Extracted {0} source terms</source>
+        <target xml:space="preserve">Se extrajeron {0} términos de origen</target>
+      </segment>
+    </unit>
+    <unit id="26">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.14</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="26">
+        <source xml:space="preserve">Extracted {0} target terms</source>
+        <target xml:space="preserve">Se extrajeron {0} términos de destino</target>
+      </segment>
+    </unit>
+    <unit id="27">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.15</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="27">
+        <source xml:space="preserve">Generated {0} term pairs after filtering</source>
+        <target xml:space="preserve">Se generaron {0} pares de términos después del filtrado</target>
+      </segment>
+    </unit>
+    <unit id="28">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.16</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="28">
+        <source xml:space="preserve">Building map for {0} terms from {1} sentences</source>
+        <target xml:space="preserve">Construyendo mapa para {0} términos de {1} oraciones</target>
+      </segment>
+    </unit>
+    <unit id="29">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.17</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="29">
+        <source xml:space="preserve">Term ''{0}'' has NO sentence indices</source>
+        <target xml:space="preserve">El término ''{0}'' NO tiene índices de oración</target>
+      </segment>
+    </unit>
+    <unit id="30">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.18</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="30">
+        <source xml:space="preserve">Term ''{0}'' has out-of-bounds sentence index {1} (max {2})</source>
+        <target xml:space="preserve">El término ''{0}'' tiene un índice de oración fuera de límites {1} (máximo {2})</target>
+      </segment>
+    </unit>
+    <unit id="31">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.19</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="31">
+        <source xml:space="preserve">Term ''{0}'' appears in {1} segments</source>
+        <target xml:space="preserve">El término ''{0}'' aparece en {1} segmentos</target>
+      </segment>
+    </unit>
+    <unit id="32">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.20</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="32">
+        <source xml:space="preserve">Mapped {0} terms to segments ({1} had no sentences, {2} had out-of-bounds indices)</source>
+        <target xml:space="preserve">Se asignaron {0} términos a segmentos ({1} no tenían oraciones, {2} tenían índices fuera de límites)</target>
+      </segment>
+    </unit>
+    <unit id="33">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.21</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="33">
+        <source xml:space="preserve">Generating pairs from {0} source terms and {1} target terms</source>
+        <target xml:space="preserve">Generando pares de {0} términos de origen y {1} términos de destino</target>
+      </segment>
+    </unit>
+    <unit id="34">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.22</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="34">
+        <source xml:space="preserve">Found pair: ''{0}'' &lt;-&gt; ''{1}'' in {2} segments</source>
+        <target xml:space="preserve">Par encontrado: ''{0}'' &lt;-&gt; ''{1}'' en {2} segmentos</target>
+      </segment>
+    </unit>
+    <unit id="35">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.23</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="35">
+        <source xml:space="preserve">Generated {0} total pairs before filtering</source>
+        <target xml:space="preserve">Se generaron {0} pares totales antes del filtrado</target>
+      </segment>
+    </unit>
+    <unit id="36">
+      <mda:metadata>
+        <mda:metaGroup category="transUnitAttributes">
+          <mda:meta type="resname">BilingualExtraction.24</mda:meta>
+        </mda:metaGroup>
+      </mda:metadata>
+      <segment state="final" id="36">
+        <source xml:space="preserve">Mutual best match filtering: {0} pairs -&gt; {1} pairs</source>
+        <target xml:space="preserve">Filtrado de mejor coincidencia mutua: {0} pares -&gt; {1} pares</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

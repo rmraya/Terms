@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx PUBLIC "-//LISA OSCAR:1998//DTD for Translation Memory eXchange//EN" "tmx14.dtd" >
+<tmx version="1.4">
+<header 
+      creationtool="OpenXLIFF" 
+      creationtoolversion="3.13.0" 
+      srclang="en" 
+      adminlang="en"  
+      datatype="xml" 
+      o-tmf="XLIFF" 
+      segtype="block"
+>
+</header>
+<body>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-48" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>\#,term,score,casing,position,frequency,relevance,relatedness,different
+</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>#,término,puntaje,capitalización,posición,frecuencia,relevancia,relación,diferente
+</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-49" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Usage:
+
+    termExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLength length] [-maxScore score] [-relevant] [-debug]
+
+Where:
+
+        -version:   (optional) Display version information and exit
+        -help:      (optional) Display this usage information and exit
+        -xliff:     The XLIFF file to process
+        -output:    (optional) The output file where the terms will be written
+        -maxLength: (optional) The maximum number of words in a term. Default: 3
+        -minFreq:   (optional) The minimum frequency for a term to be considered. Default: 3
+        -maxScore:  (optional) The maximum score for a term to be considered. Default: 10.0
+        -relevant:  (optional) Exclude single-word terms (only show multi-word terms and proper nouns). Default: false
+        -debug:     (optional) Enable debug mode with detailed logging. Default: false
+</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Uso:
+
+    termExtractor [-version] [-help] -xliff archivoXliff [-output archivoCsv] [-minFreq frecuencia] [-maxLength largo] [-maxScore puntaje] [-relevant] [-debug]
+
+Donde:
+
+        -version:   (opcional) Mostrar información de versión y salir
+        -help:      (opcional) Mostrar esta información de uso y salir
+        -xliff:     Archivo XLIFF a procesar
+        -output:    (opcional) Archivo en donde guardar los términos
+        -maxLength: (opcional) Máximo número de palabras en un término. Predeterminado: 3
+        -minFreq:   (opcional) Frecuencia mínima para considerar un término. Predeterminado: 3
+        -maxScore:  (opcional) Puntaje máximo para considerar un término. Predeterminado: 10.0
+        -relevant:  (opcional) Excluir términos de una palabra (solo mostrar términos compuestos y nombres propios). Predeterminado: false
+        -debug:     (opcional) Habilitar modo de depuración con registros detallados. Predeterminado: false
+</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-50" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Selected file is not an XLIFF 2.x document</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>El archivo seleccionado no es un documento XLIFF 2.x</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-51" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Version: {0} Build: {1}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Versión: {0} Compilación: {1}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-52" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Exception {0} was thrown while processing XLIFF file {1}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Una excepción {0} se recibió al procesar el archivo XLIFF {1}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-53" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Minimum frequency must be at least 1</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La frecuencia mínima debe ser al menos 1</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-54" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Maximum score must be greater than 0</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La puntuación máxima debe ser mayor que 0</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-55" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Maximum term length must be at least 1</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La longitud máxima del término debe ser al menos 1</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-56" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>File not found: {0}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Archivo no encontrado: {0}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-57" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Replacing ''{0}'' with ''{1}'' (better score/frequency)</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Reemplazando ''{0}'' por ''{1}'' (mejor puntuación/frecuencia)</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1567" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Merging similar terms: ''{0}'' and ''{1}''</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Fusionando términos similares: ''{0}'' y ''{1}''</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1568" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Deduplication: {0} terms -&gt; {1} terms (removed {2} duplicates)</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Deduplicación: {0} términos -&gt; {1} términos (eliminados {2} duplicados)</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1569" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Usage:
+
+    bilingualExtractor [-version] [-help] -xliff xliffFile [-output outputFile] [-minFreq frequency] [-maxLength length] [-maxScore score] [-minCoOccurrence N] [-maxPairs N] [-minCoOccurrenceRatio ratio] [-debug]
+
+Where:
+
+        -version:              (optional) Display version information and exit
+        -help:                 (optional) Display this usage information and exit
+        -xliff:                The XLIFF file to process (must contain translated segments)
+        -output:               (optional) The output CSV file for term pairs. Default: &lt;xliff&gt;_bilingual.csv
+        -maxLength:            (optional) The maximum number of words in a term. Default: 5
+        -minFreq:              (optional) The minimum frequency for a term to be considered. Default: 3
+        -maxScore:             (optional) The maximum score for a term to be considered. Default: 10.0
+        -minCoOccurrence:      (optional) Minimum number of shared segments for term pairs. Default: 1
+        -maxPairs:             (optional) Maximum number of target terms per source term (0 = no limit). Default: 0
+        -minCoOccurrenceRatio: (optional) Minimum ratio of co-occurrence to term frequency (0.0-1.0). Default: 0.7
+        -debug:                (optional) Enable debug mode with detailed logging. Default: false
+
+Note: Only multi-word terms and proper nouns are extracted for bilingual term pairs.
+</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Uso:
+
+    bilingualExtractor [-version] [-help] -xliff archivoXliff [-output archivoCsv] [-minFreq frecuencia] [-maxLength largo] [-maxScore puntaje] [-minCoOccurrence N] [-maxPairs N] [-minCoOccurrenceRatio ratio] [-debug]
+
+Donde:
+
+        -version:              (opcional) Mostrar información de versión y salir
+        -help:                 (opcional) Mostrar esta información de uso y salir
+        -xliff:                Archivo XLIFF a procesar (debe contener segmentos traducidos)
+        -output:               (opcional) Archivo CSV de pares de términos. Predeterminado: &lt;xliff&gt;_bilingual.csv
+        -maxLength:            (opcional) Máximo número de palabras en un término. Predeterminado: 5
+        -minFreq:              (opcional) Frecuencia mínima para considerar un término. Predeterminado: 3
+        -maxScore:             (opcional) Puntaje máximo para considerar un término. Predeterminado: 10.0
+        -minCoOccurrence:      (opcional) Número mínimo de segmentos compartidos para pares de términos. Predeterminado: 1
+        -maxPairs:             (opcional) Número máximo de términos objetivo por término origen (0 = sin límite). Predeterminado: 0
+        -minCoOccurrenceRatio: (opcional) Proporción mínima de co-ocurrencia a frecuencia del término (0.0-1.0). Predeterminado: 0.7
+        -debug:                (opcional) Habilitar modo de depuración con registros detallados. Predeterminado: false
+
+Nota: Solo se extraen términos compuestos y nombres propios para pares de términos bilingües.
+</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1570" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Minimum frequency must be at least 1</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La frecuencia mínima debe ser al menos 1</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1571" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Maximum score must be greater than 0</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La puntuación máxima debe ser mayor que 0</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1572" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Maximum term length must be at least 1</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La longitud máxima del término debe ser al menos 1</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1573" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Minimum co-occurrence must be at least 1</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La co-ocurrencia mínima debe ser al menos 1</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1574" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Maximum pairs cannot be negative</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>El máximo de pares no puede ser negativo</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1575" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Minimum co-occurrence ratio must be between 0.0 and 1.0</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>La relación mínima de co-ocurrencia debe estar entre 0.0 y 1.0</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1576" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>File not found: {0}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Archivo no encontrado: {0}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1598" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Bilingual term extraction completed. Output: {0}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Extracción de términos bilingües completada. Salida: {0}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1599" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Error during extraction</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Error durante la extracción</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1600" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Source language: {0}, Target language: {1}</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Idioma origen: {0}, Idioma destino: {1}</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1601" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>No segments with state='final' found in XLIFF file</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>No se encontraron segmentos con state='final' en el archivo XLIFF</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1602" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Found {0} final segments</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se encontraron {0} segmentos finales</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1603" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Extracted {0} source terms</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se extrajeron {0} términos de origen</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1604" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Extracted {0} target terms</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se extrajeron {0} términos de destino</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1605" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Generated {0} term pairs after filtering</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se generaron {0} pares de términos después del filtrado</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1606" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Building map for {0} terms from {1} sentences</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Construyendo mapa para {0} términos de {1} oraciones</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1607" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Term ''{0}'' has NO sentence indices</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>El término ''{0}'' NO tiene índices de oración</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1629" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Term ''{0}'' has out-of-bounds sentence index {1} (max {2})</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>El término ''{0}'' tiene un índice de oración fuera de límites {1} (máximo {2})</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1630" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Term ''{0}'' appears in {1} segments</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>El término ''{0}'' aparece en {1} segmentos</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1631" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Mapped {0} terms to segments ({1} had no sentences, {2} had out-of-bounds indices)</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se asignaron {0} términos a segmentos ({1} no tenían oraciones, {2} tenían índices fuera de límites)</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1632" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Generating pairs from {0} source terms and {1} target terms</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Generando pares de {0} términos de origen y {1} términos de destino</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1633" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Found pair: ''{0}'' &lt;-&gt; ''{1}'' in {2} segments</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Par encontrado: ''{0}'' &lt;-&gt; ''{1}'' en {2} segmentos</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1634" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Generated {0} total pairs before filtering</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Se generaron {0} pares totales antes del filtrado</seg>
+</tuv>
+</tu>
+<tu creationtool="OpenXLIFF Filters" creationtoolversion="3.13.0" tuid="-582769687-0-1635" creationdate="20251216T145132Z">
+<tuv xml:lang="en" creationdate="20251216T145132Z">
+<seg>Mutual best match filtering: {0} pairs -&gt; {1} pairs</seg>
+</tuv>
+<tuv xml:lang="es" creationdate="20251216T145132Z">
+<seg>Filtrado de mejor coincidencia mutua: {0} pares -&gt; {1} pares</seg>
+</tuv>
+</tu>
+</body>
+</tmx>
