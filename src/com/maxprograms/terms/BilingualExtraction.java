@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.nio.charset.StandardCharsets;
-import java.text.BreakIterator;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +34,6 @@ import org.xml.sax.SAXException;
 import com.maxprograms.xml.Document;
 import com.maxprograms.xml.Element;
 import com.maxprograms.xml.SAXBuilder;
-import com.maxprograms.xml.TextNode;
 import com.maxprograms.xml.XMLOutputter;
 
 public class BilingualExtraction {
@@ -118,33 +116,34 @@ public class BilingualExtraction {
 
             // Validate parameters
             if (minFrequency < 1) {
-                logger.log(Level.ERROR, "Minimum frequency must be at least 1");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.1"));
                 System.exit(1);
             }
             if (maxScore <= 0) {
-                logger.log(Level.ERROR, "Maximum score must be greater than 0");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.2"));
                 System.exit(1);
             }
             if (maxTermLength < 1) {
-                logger.log(Level.ERROR, "Maximum term length must be at least 1");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.3"));
                 System.exit(1);
             }
             if (minCoOccurrence < 1) {
-                logger.log(Level.ERROR, "Minimum co-occurrence must be at least 1");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.4"));
                 System.exit(1);
             }
             if (maxPairs < 0) {
-                logger.log(Level.ERROR, "Maximum pairs cannot be negative");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.5"));
                 System.exit(1);
             }
             if (minCoOccurrenceRatio < 0.0 || minCoOccurrenceRatio > 1.0) {
-                logger.log(Level.ERROR, "Minimum co-occurrence ratio must be between 0.0 and 1.0");
+                logger.log(Level.ERROR, Messages.getString("BilingualExtraction.6"));
                 System.exit(1);
             }
 
             File xliffFile = new File(xliff);
             if (!xliffFile.exists()) {
-                logger.log(Level.ERROR, "File not found: " + xliff);
+                MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.7"));
+                logger.log(Level.ERROR, mf.format(new String[] { xliff }));
                 System.exit(1);
             }
 
@@ -164,11 +163,12 @@ public class BilingualExtraction {
                     minCoOccurrence, maxPairs, minCoOccurrenceRatio);
 
             if (debug) {
-                logger.log(Level.INFO, "Bilingual term extraction completed. Output: " + output);
+                MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.8"));
+                logger.log(Level.INFO, mf.format(new String[] { output }));
             }
 
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Error during extraction", e);
+            logger.log(Level.ERROR, Messages.getString("BilingualExtraction.9"), e);
             if (debug) {
                 e.printStackTrace();
             }
@@ -189,12 +189,13 @@ public class BilingualExtraction {
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xliffFile);
         Element root = doc.getRootElement();
-        
+
         String srcLang = root.getAttributeValue("srcLang", "en");
         String trgLang = root.getAttributeValue("trgLang", "en");
-        
+
         if (debug) {
-            logger.log(Level.INFO, "Source language: " + srcLang + ", Target language: " + trgLang);
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.10"));
+            logger.log(Level.INFO, mf.format(new String[] { srcLang, trgLang }));
         }
 
         // Step 2: Create temporary XLIFF files for source and target
@@ -202,64 +203,70 @@ public class BilingualExtraction {
         File tempTargetXliff = File.createTempFile("bilingual_target_", ".xlf");
         tempSourceXliff.deleteOnExit();
         tempTargetXliff.deleteOnExit();
-        
-        int segmentCount = createTempXliffFiles(xliffFile, srcLang, trgLang, 
-                                                 tempSourceXliff.getAbsolutePath(), 
-                                                 tempTargetXliff.getAbsolutePath());
+
+        int segmentCount = createTempXliffFiles(xliffFile, srcLang, trgLang,
+                tempSourceXliff.getAbsolutePath(),
+                tempTargetXliff.getAbsolutePath());
 
         if (segmentCount == 0) {
-            logger.log(Level.WARNING, "No segments with state='final' found in XLIFF file");
+            logger.log(Level.WARNING, Messages.getString("BilingualExtraction.11"));
             return;
         }
 
         if (debug) {
-            logger.log(Level.INFO, "Found " + segmentCount + " final segments");
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.12"));
+            logger.log(Level.INFO, mf.format(new Object[] { segmentCount }));
         }
 
         // Step 3: Extract terms from source using TermExtractor
-        TermExtractor sourceExtractor = new TermExtractor(tempSourceXliff.getAbsolutePath(), 
-                                                           maxTermLength, minFrequency, maxScore, false);
+        TermExtractor sourceExtractor = new TermExtractor(tempSourceXliff.getAbsolutePath(),
+                maxTermLength, minFrequency, maxScore, false);
         List<Term> sourceTerms = sourceExtractor.getTerms();
         List<Integer> sourceSentenceToSegment = sourceExtractor.getSentenceToSegmentMap();
 
         if (debug) {
-            logger.log(Level.INFO, "Extracted " + sourceTerms.size() + " source terms");
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.13"));
+            logger.log(Level.INFO, mf.format(new Object[] { sourceTerms.size() }));
         }
 
         // Step 4: Extract terms from target using TermExtractor
-        TermExtractor targetExtractor = new TermExtractor(tempTargetXliff.getAbsolutePath(), 
-                                                           maxTermLength, minFrequency, maxScore, false);
+        TermExtractor targetExtractor = new TermExtractor(tempTargetXliff.getAbsolutePath(),
+                maxTermLength, minFrequency, maxScore, false);
         List<Term> targetTerms = targetExtractor.getTerms();
         List<Integer> targetSentenceToSegment = targetExtractor.getSentenceToSegmentMap();
 
         if (debug) {
-            logger.log(Level.INFO, "Extracted " + targetTerms.size() + " target terms");
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.14"));
+            logger.log(Level.INFO, mf.format(new Object[] { targetTerms.size() }));
         }
 
         // Step 5: Build segment-to-term mapping using sentence indices
-        Map<String, Set<Integer>> sourceTermSegments = buildTermSegmentMapFromSentences(sourceTerms, sourceSentenceToSegment);
-        Map<String, Set<Integer>> targetTermSegments = buildTermSegmentMapFromSentences(targetTerms, targetSentenceToSegment);
+        Map<String, Set<Integer>> sourceTermSegments = buildTermSegmentMapFromSentences(sourceTerms,
+                sourceSentenceToSegment);
+        Map<String, Set<Integer>> targetTermSegments = buildTermSegmentMapFromSentences(targetTerms,
+                targetSentenceToSegment);
 
         // Step 6: Generate co-occurring pairs
         List<TermPair> pairs = generatePairs(sourceTerms, targetTerms, sourceTermSegments, targetTermSegments);
 
         // Step 7: Apply mutual best match filtering to reduce garbage pairs
         pairs = filterMutualBestMatch(pairs);
-        
+
         // Step 8: Apply co-occurrence filters
         pairs = filterPairs(pairs, minCoOccurrence, maxPairs, minCoOccurrenceRatio);
-        
+
         // Step 9: Deduplicate pairs (keep best terms based on YAKE score)
         pairs = deduplicatePairs(pairs);
 
         if (debug) {
-            logger.log(Level.INFO, "Generated " + pairs.size() + " term pairs after filtering");
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.15"));
+            logger.log(Level.INFO, mf.format(new Object[] { pairs.size() }));
         }
 
         // Step 9: Write CSV output
         writeCSV(outputFile, pairs);
     }
-    
+
     private int createTempXliffFiles(String xliffFile, String srcLang, String trgLang,
             String sourceXliffPath, String targetXliffPath)
             throws SAXException, IOException, ParserConfigurationException {
@@ -271,22 +278,22 @@ public class BilingualExtraction {
         // Create both documents simultaneously to ensure matching segment numbers
         Document sourceDoc = createEmptyXliff(srcLang);
         Document targetDoc = createEmptyXliff(trgLang);
-        
+
         Element sourceFile = sourceDoc.getRootElement().getChild("file");
         Element targetFile = targetDoc.getRootElement().getChild("file");
-        
+
         Locale srcLocale = Locale.forLanguageTag(srcLang);
         Locale trgLocale = Locale.forLanguageTag(trgLang);
-        
+
         // Process both source and target together
         int segmentCount = collectFinalSegmentPairs(root, sourceFile, targetFile, srcLocale, trgLocale);
-        
+
         writeXmlDocument(sourceDoc, sourceXliffPath);
         writeXmlDocument(targetDoc, targetXliffPath);
 
         return segmentCount;
     }
-    
+
     private Document createEmptyXliff(String language) {
         Element xliff = new Element("xliff");
         xliff.setAttribute("version", "2.1");
@@ -301,23 +308,23 @@ public class BilingualExtraction {
         doc.setRootElement(xliff);
         return doc;
     }
-    
+
     private int collectFinalSegmentPairs(Element element, Element sourceFile, Element targetFile,
             Locale srcLocale, Locale trgLocale) {
-        
+
         if ("segment".equals(element.getName())) {
             String state = element.getAttributeValue("state", "");
             if ("final".equals(state)) {
                 Element sourceElem = element.getChild("source");
                 Element targetElem = element.getChild("target");
-                
+
                 if (sourceElem != null && targetElem != null) {
                     String sourceText = Utils.pureText(sourceElem);
                     String targetText = Utils.pureText(targetElem);
-                    
+
                     if (!sourceText.isBlank() && !targetText.isBlank()) {
                         int segmentNumber = sourceFile.getChildren().size();
-                        
+
                         // Create source segment with full text
                         Element srcSeg = new Element("segment");
                         srcSeg.setAttribute("id", String.valueOf(segmentNumber));
@@ -325,7 +332,7 @@ public class BilingualExtraction {
                         src.addContent(sourceText);
                         srcSeg.addContent(src);
                         sourceFile.addContent(srcSeg);
-                        
+
                         // Create target segment with SAME number
                         Element tgtSeg = new Element("segment");
                         tgtSeg.setAttribute("id", String.valueOf(segmentNumber));
@@ -337,16 +344,16 @@ public class BilingualExtraction {
                 }
             }
         }
-        
+
         // Recurse through children
         List<Element> children = element.getChildren();
         for (Element child : children) {
             collectFinalSegmentPairs(child, sourceFile, targetFile, srcLocale, trgLocale);
         }
-        
+
         return sourceFile.getChildren().size();
     }
-    
+
     private void writeXmlDocument(Document doc, String filePath) throws IOException {
         XMLOutputter outputter = new XMLOutputter();
         outputter.preserveSpace(true);
@@ -355,29 +362,31 @@ public class BilingualExtraction {
         }
     }
 
-    private Map<String, Set<Integer>> buildTermSegmentMapFromSentences(List<Term> terms, List<Integer> sentenceToSegment) {
+    private Map<String, Set<Integer>> buildTermSegmentMapFromSentences(List<Term> terms,
+            List<Integer> sentenceToSegment) {
         Map<String, Set<Integer>> termSegments = new HashMap<>();
 
         if (debug) {
-            logger.log(Level.INFO, "Building map for {0} terms from {1} sentences", 
-                    new Object[]{terms.size(), sentenceToSegment.size()});
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.16"));
+            logger.log(Level.INFO, mf.format(new Object[] { terms.size(), sentenceToSegment.size() }));
         }
-        
+
         int termsWithSegments = 0;
         int termsWithNoSentences = 0;
         int termsWithOutOfBoundsSentences = 0;
-        
+
         for (Term term : terms) {
             Set<Integer> segments = new HashSet<>();
             Vector<Integer> sentenceIndices = term.getOffsetSentences();
-            
+
             if (sentenceIndices.isEmpty()) {
                 termsWithNoSentences++;
                 if (debug && termsWithNoSentences <= 3) {
-                    logger.log(Level.INFO, "  Term ''{0}'' has NO sentence indices", term.getText());
+                    MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.17"));
+                    logger.log(Level.INFO, mf.format(new String[] { term.getText() }));
                 }
             }
-            
+
             // Map sentence indices to segment numbers
             for (Integer sentenceIndex : sentenceIndices) {
                 if (sentenceIndex < sentenceToSegment.size()) {
@@ -385,26 +394,26 @@ public class BilingualExtraction {
                 } else {
                     termsWithOutOfBoundsSentences++;
                     if (debug && termsWithOutOfBoundsSentences <= 3) {
-                        logger.log(Level.INFO, "  Term ''{0}'' has out-of-bounds sentence index {1} (max {2})", 
-                                new Object[]{term.getText(), sentenceIndex, sentenceToSegment.size() - 1});
+                        MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.18"));
+                        logger.log(Level.INFO, mf.format(new Object[] { term.getText(), sentenceIndex, sentenceToSegment.size() - 1 }));
                     }
                 }
             }
-            
+
             if (!segments.isEmpty()) {
                 termsWithSegments++;
                 if (debug && termsWithSegments <= 3) {
-                    logger.log(Level.INFO, "  Term ''{0}'' appears in {1} segments", 
-                            new Object[]{term.getText(), segments.size()});
+                    MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.19"));
+                    logger.log(Level.INFO, mf.format(new Object[] { term.getText(), segments.size() }));
                 }
             }
-            
+
             termSegments.put(term.getText(), segments);
         }
-        
+
         if (debug) {
-            logger.log(Level.INFO, "Mapped {0} terms to segments ({1} had no sentences, {2} had out-of-bounds indices)", 
-                    new Object[]{termsWithSegments, termsWithNoSentences, termsWithOutOfBoundsSentences});
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.20"));
+            logger.log(Level.INFO, mf.format(new Object[] { termsWithSegments, termsWithNoSentences, termsWithOutOfBoundsSentences }));
         }
         return termSegments;
     }
@@ -414,8 +423,8 @@ public class BilingualExtraction {
 
         List<TermPair> pairs = new ArrayList<>();
         if (debug) {
-            logger.log(Level.INFO, "Generating pairs from {0} source terms and {1} target terms", 
-                    new Object[]{sourceTerms.size(), targetTerms.size()});
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.21"));
+            logger.log(Level.INFO, mf.format(new Object[] { sourceTerms.size(), targetTerms.size() }));
         }
 
         int pairsFound = 0;
@@ -439,15 +448,16 @@ public class BilingualExtraction {
                     pairs.add(new TermPair(sourceTerm, targetTerm, sharedSegments));
                     pairsFound++;
                     if (debug && pairsFound <= 5) {
-                        logger.log(Level.INFO, "Found pair: ''{0}'' <-> ''{1}'' in {2} segments", 
-                                new Object[]{sourceTerm.getText(), targetTerm.getText(), sharedSegments.size()});
+                        MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.22"));
+                        logger.log(Level.INFO, mf.format(new Object[] { sourceTerm.getText(), targetTerm.getText(), sharedSegments.size() }));
                     }
                 }
             }
         }
 
         if (debug) {
-            logger.log(Level.INFO, "Generated {0} total pairs before filtering", pairsFound);
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.23"));
+            logger.log(Level.INFO, mf.format(new Object[] { pairsFound }));
         }
         return pairs;
     }
@@ -456,7 +466,7 @@ public class BilingualExtraction {
         // Build maps of best matches in each direction
         Map<String, TermPair> bestTargetForSource = new HashMap<>();
         Map<String, TermPair> bestSourceForTarget = new HashMap<>();
-        
+
         // Find best target for each source term (highest co-occurrence count)
         for (TermPair pair : pairs) {
             String sourceText = pair.sourceTerm.getText();
@@ -465,7 +475,7 @@ public class BilingualExtraction {
                 bestTargetForSource.put(sourceText, pair);
             }
         }
-        
+
         // Find best source for each target term (highest co-occurrence count)
         for (TermPair pair : pairs) {
             String targetText = pair.targetTerm.getText();
@@ -474,31 +484,32 @@ public class BilingualExtraction {
                 bestSourceForTarget.put(targetText, pair);
             }
         }
-        
+
         // Keep only mutual best matches
         List<TermPair> filtered = new ArrayList<>();
         for (TermPair pair : pairs) {
             String sourceText = pair.sourceTerm.getText();
             String targetText = pair.targetTerm.getText();
-            
+
             TermPair bestTarget = bestTargetForSource.get(sourceText);
             TermPair bestSource = bestSourceForTarget.get(targetText);
-            
+
             // Mutual best match: this pair is best for source AND best for target
             if (bestTarget == pair && bestSource == pair) {
                 filtered.add(pair);
             }
         }
-        
+
         if (debug) {
-            logger.log(Level.INFO, "Mutual best match filtering: {0} pairs -> {1} pairs", 
-                    new Object[]{pairs.size(), filtered.size()});
+            MessageFormat mf = new MessageFormat(Messages.getString("BilingualExtraction.24"));
+            logger.log(Level.INFO, mf.format(new Object[] { pairs.size(), filtered.size() }));
         }
-        
+
         return filtered;
     }
 
-    private List<TermPair> filterPairs(List<TermPair> pairs, int minCoOccurrence, int maxPairs, double minCoOccurrenceRatio) {
+    private List<TermPair> filterPairs(List<TermPair> pairs, int minCoOccurrence, int maxPairs,
+            double minCoOccurrenceRatio) {
         // Filter by minimum co-occurrence and ratio (check both directions)
         List<TermPair> filtered = pairs.stream()
                 .filter(pair -> {
@@ -532,7 +543,7 @@ public class BilingualExtraction {
                 int count = Math.min(maxPairs, termPairs.size());
                 limitedBySource.addAll(termPairs.subList(0, count));
             }
-            
+
             // Second: limit source terms per target term
             Map<String, List<TermPair>> byTargetTerm = new HashMap<>();
             for (TermPair pair : limitedBySource) {
@@ -545,7 +556,7 @@ public class BilingualExtraction {
                 int count = Math.min(maxPairs, termPairs.size());
                 limitedByTarget.addAll(termPairs.subList(0, count));
             }
-            
+
             filtered = limitedByTarget;
         }
 
@@ -556,58 +567,58 @@ public class BilingualExtraction {
         // First pass: deduplicate by source term + segments (remove shorter targets)
         Map<String, List<TermPair>> bySource = new HashMap<>();
         for (TermPair pair : pairs) {
-                String key = pair.sourceTerm.getText() + "|" + pair.sharedSegments.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(","));
+            String key = pair.sourceTerm.getText() + "|" + pair.sharedSegments.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
             bySource.computeIfAbsent(key, k -> new ArrayList<>()).add(pair);
         }
-        
+
         List<TermPair> afterSourceDedup = new ArrayList<>();
         for (List<TermPair> group : bySource.values()) {
             afterSourceDedup.addAll(deduplicateBySubstring(group, false)); // false = check targets
         }
-        
+
         // Second pass: deduplicate by target term + segments (remove shorter sources)
         Map<String, List<TermPair>> byTarget = new HashMap<>();
         for (TermPair pair : afterSourceDedup) {
-                String key = pair.targetTerm.getText() + "|" + pair.sharedSegments.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(","));
+            String key = pair.targetTerm.getText() + "|" + pair.sharedSegments.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
             byTarget.computeIfAbsent(key, k -> new ArrayList<>()).add(pair);
         }
-        
+
         List<TermPair> deduplicated = new ArrayList<>();
         for (List<TermPair> group : byTarget.values()) {
             deduplicated.addAll(deduplicateBySubstring(group, true)); // true = check sources
         }
-        
+
         return deduplicated;
     }
-    
+
     private List<TermPair> deduplicateBySubstring(List<TermPair> group, boolean checkSource) {
         if (group.size() == 1) {
             return group;
         }
-        
+
         List<TermPair> result = new ArrayList<>();
         boolean[] kept = new boolean[group.size()];
         for (int i = 0; i < group.size(); i++) {
             kept[i] = true;
         }
-        
+
         // First pass: remove substring relationships
         for (int i = 0; i < group.size(); i++) {
-            if (!kept[i]) continue;
-            String term1 = checkSource ? 
-                group.get(i).sourceTerm.getText().toLowerCase() :
-                group.get(i).targetTerm.getText().toLowerCase();
-            
+            if (!kept[i])
+                continue;
+            String term1 = checkSource ? group.get(i).sourceTerm.getText().toLowerCase()
+                    : group.get(i).targetTerm.getText().toLowerCase();
+
             for (int j = 0; j < group.size(); j++) {
-                if (i == j || !kept[j]) continue;
-                String term2 = checkSource ?
-                    group.get(j).sourceTerm.getText().toLowerCase() :
-                    group.get(j).targetTerm.getText().toLowerCase();
-                
+                if (i == j || !kept[j])
+                    continue;
+                String term2 = checkSource ? group.get(j).sourceTerm.getText().toLowerCase()
+                        : group.get(j).targetTerm.getText().toLowerCase();
+
                 // If term1 is a substring of term2, remove term1 (keep longer)
                 if (term2.contains(term1) && !term1.equals(term2)) {
                     kept[i] = false;
@@ -619,7 +630,7 @@ public class BilingualExtraction {
                 }
             }
         }
-        
+
         // Second pass: among remaining terms, keep only the longest (most words)
         List<TermPair> remaining = new ArrayList<>();
         for (int i = 0; i < group.size(); i++) {
@@ -627,32 +638,28 @@ public class BilingualExtraction {
                 remaining.add(group.get(i));
             }
         }
-        
+
         if (remaining.size() > 1) {
             // Find the pair with the best term (lowest YAKE score = highest quality)
             TermPair best = remaining.get(0);
             double bestScore = checkSource ? best.sourceTerm.getScore() : best.targetTerm.getScore();
-            
+
             for (int i = 1; i < remaining.size(); i++) {
                 TermPair candidate = remaining.get(i);
                 double candidateScore = checkSource ? candidate.sourceTerm.getScore() : candidate.targetTerm.getScore();
-                
+
                 if (candidateScore < bestScore) {
                     best = candidate;
                     bestScore = candidateScore;
                 }
             }
-            
+
             result.add(best);
         } else {
             result.addAll(remaining);
         }
-        
+
         return result;
-    }
-    
-    private int countWords(String text) {
-        return text.trim().split("\\s+").length;
     }
 
     private void writeCSV(String outputFile, List<TermPair> pairs) throws IOException {

@@ -102,20 +102,21 @@ public class TermExtractor {
             }
             // Validate parameters
             if (minFrequency < 1) {
-                logger.log(Level.ERROR, "Minimum frequency must be at least 1");
+                logger.log(Level.ERROR, Messages.getString("TermExtractor.6"));
                 System.exit(1);
             }
             if (maxScore <= 0) {
-                logger.log(Level.ERROR, "Maximum score must be greater than 0");
+                logger.log(Level.ERROR, Messages.getString("TermExtractor.7"));
                 System.exit(1);
             }
             if (maxTermLenght < 1) {
-                logger.log(Level.ERROR, "Maximum term length must be at least 1");
+                logger.log(Level.ERROR, Messages.getString("TermExtractor.8"));
                 System.exit(1);
             }
             File xliffFile = new File(xliff);
             if (!xliffFile.exists()) {
-                logger.log(Level.ERROR, "File not found: " + xliff);
+                MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.9"));
+                logger.log(Level.ERROR, mf.format(new String[] { xliff }));
                 System.exit(1);
             }
             if (output.isEmpty()) {
@@ -434,7 +435,8 @@ public class TermExtractor {
                 if (term.getScore() < existing.getScore() || 
                     (term.getScore() == existing.getScore() && term.getTermFrequency() > existing.getTermFrequency())) {
                     if (debug) {
-                        logger.log(Level.INFO, "Replacing '" + existing.getText() + "' with '" + term.getText() + "' (better score/frequency)");
+                        MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.10"));
+                        logger.log(Level.INFO, mf.format(new String[] { existing.getText(), term.getText() }));
                     }
                     normalized.put(normalizedKey, term);
                 }
@@ -467,7 +469,8 @@ public class TermExtractor {
                 if (areSimilar(text1, text2)) {
                     merged[j] = true;
                     if (debug) {
-                        logger.log(Level.INFO, "Merging similar terms: '" + text1 + "' and '" + text2 + "'");
+                        MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.11"));
+                        logger.log(Level.INFO, mf.format(new String[] { text1, text2 }));
                     }
                     // Keep the term with better score
                     if (term2.getScore() < bestTerm.getScore() ||
@@ -480,7 +483,8 @@ public class TermExtractor {
         }
         
         if (debug) {
-            logger.log(Level.INFO, "Deduplication: " + originalCount + " terms -> " + deduplicated.size() + " terms (removed " + (originalCount - deduplicated.size()) + " duplicates)");
+            MessageFormat mf = new MessageFormat(Messages.getString("TermExtractor.12"));
+            logger.log(Level.INFO, mf.format(new Object[] { originalCount, deduplicated.size(), (originalCount - deduplicated.size()) }));
         }
         
         // Update terms list and index

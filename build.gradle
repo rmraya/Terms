@@ -58,8 +58,9 @@ tasks.register('jlink', Exec) {
         delete 'dist'
     }
     
+    def pathSeparator = System.getProperty('os.name').toLowerCase().contains('win') ? ';' : ':'
     commandLine 'jlink',
-        '--module-path', "lib:${System.getProperty('java.home')}/jmods",
+        '--module-path', "lib${pathSeparator}${System.getProperty('java.home')}/jmods",
         '--add-modules', 'terms',
         '--output', 'dist',
         '--no-man-pages',
