@@ -95,6 +95,12 @@ public class TermExtractor {
                 if ("-debug".equals(args[i])) {
                     debug = true;
                 }
+                if ("-lang".equals(args[i]) && i + 1 < args.length) {
+                    String lang = args[i + 1];
+                    if ("en".equals(lang) || "es".equals(lang) ) {
+                        Locale.setDefault(Locale.forLanguageTag(lang));
+                    }                    
+                }
             }
             if (xliff.isEmpty()) {
                 usage();
